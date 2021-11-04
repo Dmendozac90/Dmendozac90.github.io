@@ -18,21 +18,37 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Daniel Mendoza
+title: Online CV
+author: Dmendozac90
 email: Dmendozac90@gmail.com
+place_name: Greeley, CO
 description: >- # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: jekyllrb
-github_username:  Dmendozac90
+  Machine learning, Data science, other programining posts in python
+
+sass:
+  sass_dir: _sass
+
+plainwhite:
+ name: Daniel Mendoza
+ tagline: Petroleum Engineer
+ date_format: "%b %-d, %Y"
+ baseurl: "" # the subpath of your site, e.g. /blog
+ url: "Dmendozac90.github.io" 
+ darkmode: true
+ portfolio_image: "assets/portfolio.png"
+ html_lang: en
+
+ social_links:
+   #twitter: samarsault
+   github: Dmendozac90
+   linkedIn: in/daniel-mendoza-398618148 # format: locale/username
 
 # Build settings
-theme: minima
+remote_theme: samarsault/plainwhite-jekyll
+theme: plainwhite
 plugins:
-  - jekyll-feed
+  - jekyll-seo-tag
+
 
 # Exclude from processing.
 # The following items will not be processed, by default.
