@@ -46,9 +46,10 @@ plainwhite:
 # Build settings
 remote_theme: samarsault/plainwhite-jekyll
 theme: plainwhite
+markdown: kramdown
 plugins:
   - jekyll-seo-tag
-
+highlighter: rouge
 
 # Exclude from processing.
 # The following items will not be processed, by default.
