@@ -1,72 +1,60 @@
-# Welcome to Jekyll!
-#
-# This config file is meant for settings that affect your whole blog, values
-# which you are expected to set up once and rarely edit after that. If you find
-# yourself editing this file very often, consider using Jekyll's data files
-# feature for the data you need to update frequently.
-#
-# For technical reasons, this file is *NOT* reloaded automatically when you use
-# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
-#
-# If you need help with YAML syntax, here are some quick references for you: 
-# https://learn-the-web.algonquindesign.ca/topics/markdown-yaml-cheat-sheet/#yaml
-# https://learnxinyminutes.com/docs/yaml/
-#
-# Site settings
-# These are used to personalize your new site. If you look in the HTML files,
-# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
-# You can create any custom variable you would like, and they will be accessible
-# in the templates via {{ site.myvariable }}.
-
-title: Online CV
-author: Dmendozac90
+# Info about you
+name: Daniel Mendoza
+position: Petroleum Engineer
 email: Dmendozac90@gmail.com
+#company_name: C.H. Robinson
+#company_url: https://www.chrobinson.com/
 place_name: Greeley, CO
-description: >- # this means to ignore newlines until "baseurl:"
-  Machine learning, Data science, other programining posts in python
 
-sass:
-  sass_dir: _sass
+# Blog info
+title: Daniel Mendoza
+description: Blog
+url: http://dmendozac90.github.io/
 
-plainwhite:
- name: Daniel Mendoza
- tagline: Petroleum Engineer
- date_format: "%b %-d, %Y"
- baseurl: "" # the subpath of your site, e.g. /blog
- url: "Dmendozac90.github.io" 
- darkmode: true
- portfolio_image: "assets/portfolio.png"
- html_lang: en
+# Social links
+github_url: https://github.com/dendozac90
+linkedin_url: http://www.linkedin.com/in/daniel-mendoza-398618148
+social:
+  links:
+    - http://www.linkedin.com/in/daniel-mendoza-398618148
+    - https://github.com/dmendozac90
 
- social_links:
-   #twitter: samarsault
-   github: Dmendozac90
-   linkedIn: in/daniel-mendoza-398618148 # format: locale/username
+# Images + files
+logo: /assets/portfolio.png
+#cv_url: /assets/files/BrendanHasz_CV.pdf
+resume_url: /assets/files/Daniel_Mendoza_Resume.pdf
 
-# Build settings
-remote_theme: samarsault/plainwhite-jekyll
-theme: plainwhite
+# Blog settings
 markdown: kramdown
 plugins:
   - jekyll-seo-tag
+  - jekyll-fontello
 highlighter: rouge
+color_mode: auto  # auto, light, or dark
+comments: true
+#disqus_shortname: brendanhasz-github-io
+syntax_highlight_stylesheet: syntax_highlight.css
 
-# Exclude from processing.
-# The following items will not be processed, by default.
-# Any item listed under the `exclude:` key here will be automatically added to
-# the internal "default list".
-#
-# Excluded items can be processed by explicitly listing the directories or
-# their entries' file path in the `include:` list.
-#
-# exclude:
-#   - .sass-cache/
-#   - .jekyll-cache/
-#   - gemfiles/
-#   - Gemfile
-#   - Gemfile.lock
-#   - node_modules/
-#   - vendor/bundle/
-#   - vendor/cache/
-#   - vendor/gems/
-#   - vendor/ruby/
+# Colors - light mode
+colors:
+  text: 282828
+  tag: 404b57
+  tag_hover: 1f242a
+  header_background: 1f242a
+  header_text: ebebeb
+  header_link_hover: 3aa6fb
+  links: 3aa6fb
+  links_visited: 0a0a0a
+
+# Colors - dark mode
+colors_dark:
+  background: 333
+  text: ccc
+  tag: 2e6830
+  tag_hover: 93cf95
+  header_background: 232
+  header_text: 93cf95
+  header_link: 93cf95
+  header_link_hover: 459c48
+  links: 459c48
+  links_visited: 357a38

@@ -83,7 +83,7 @@
     {
       "uid": "26780f48c9ebffeab4e0402830aa8aa1",
       "css": "calendar-1",
-      "code": 59393,
+      "code": 59394,
       "src": "custom_icons",
       "selected": true,
       "svg": {
@@ -111,6 +111,60 @@
       "css": "gitlab",
       "code": 62102,
       "src": "fontawesome"
+    },
+    {
+      "uid": "ccc2329632396dc096bb638d4b46fb98",
+      "css": "mail-alt",
+      "code": 61664,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "cb35902d643e9e6ba8ba1cf739edef9a",
+      "css": "doc-inv",
+      "code": 59393,
+      "src": "iconic"
+    },
+    {
+      "uid": "gjt8ba5q0n3nn8ptw6324sflr8qoaeam",
+      "css": "location",
+      "code": 59395,
+      "src": "typicons"
+    },
+    {
+      "uid": "f1ecd8633b0ec659877c02cd796df1fd",
+      "css": "chart-bar",
+      "code": 59396,
+      "src": "iconic"
+    },
+    {
+      "uid": "8aa58289df2cc42b260897d7e61aa2c2",
+      "css": "chart-pie-alt",
+      "code": 59398,
+      "src": "iconic"
+    },
+    {
+      "uid": "a8ed7903f8f548da5a8084e1773f0bbb",
+      "css": "chat",
+      "code": 61501,
+      "src": "mfglabs"
+    },
+    {
+      "uid": "d2d6ab0dd4fb9365b1d5756380484bbb",
+      "css": "pi",
+      "code": 59399,
+      "src": "typicons"
+    },
+    {
+      "uid": "c5fd68d8253e605e7a78a0c75255b692",
+      "css": "math",
+      "code": 61466,
+      "src": "mfglabs"
+    },
+    {
+      "uid": "xoidjr6q3rzi7tpw6hci1k6srz15g11l",
+      "css": "puzzle",
+      "code": 59400,
+      "src": "typicons"
     },
     {
       "uid": "1f1877aff7a2cd39092fcf73c3b5e7cb",

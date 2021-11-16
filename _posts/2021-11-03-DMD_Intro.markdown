@@ -2,15 +2,16 @@
 layout: post
 title:  "Introduction to Dynamic Mode Decomposition"
 date:   2021-11-03 14:30:22 -0600
-categories: python DynamicModeDecompostion
-language: [python]
+description: "Originally developed within fluid dynamics, dynamic mode decomposition (DMD) has become a modern, powerful technique used to charecterize dynamical systems from high-dimensional data. In the era of big data, the integration with modern scientific computation and machine learning is rapidly increasing the popularity of data-driven approaches like DMD to discover rich insights from complex dynamical systems. These modern data-driven approaches hold a new potential to revolutionize the understanding, predicatbility, and control of these systems. A brief introduction of the DMD is the topic of this post."
+categories: Python Dynamic_Mode_Decompostion Data-Driven_Methods
+html_url: /assets/img/DynamicModeDecomp/Contour.html
 ---
 
 **Outline**
 - [Introduction](#Introduction)
-- [Mathematical Overview](#Math_Overivew)
-- [The DMD Algorithm](#The DMD Algorithm)
-- [The Code](#The Code)
+- [Mathematical Overview](#Mathematical-Overview)
+- [The DMD Algorithm](#The-DMD-Algorithm)
+- [The Code](#The-Code)
 
 ## Introduction
 
@@ -24,13 +25,15 @@ In this post I will provide a brief mathematical overview of the notation and DM
 
 ## Mathematical Overview
 
-To motivate the application of the DMD algorithm on dynamic data, consider a dynamical systems in the form:
+To motivate the application of the DMD algorithm on dynamic data, consider dynamical systems in the form:
+
 
 $$
 \frac{d\mathbf{x}}{dt} = \mathbf{f}(\mathbf{x}, t; \mathbf{\mu}),
 $$
 
-where $$\mathbf{x} \in \mathbb{R}^n$$ is the system state at time $$t$$, $$\mathbf{f}(\cdot)$$ are the dynamics and $$\mu$$ is the sytem parameters. For illustrative purposes, consider the Lorenz equations 
+
+where $$\mathbf{x} \in \mathbb{R}^n$$ is the system state at time $$t$$, $$\mathbf{f}(\cdot)$$ are the dynamics and $$\mu$$ are the sytem parameters. To illustrate this notation with an acutal dynamic system, consider the Lorenz equations 
 
 $$
 \frac{dx}{dt} = \sigma (y - x)
@@ -52,7 +55,7 @@ $$
 \frac{d\mathbf{x}}{dt} = \mathbf{f}(\mathbf{x}, t)
 $$
 
-We also consider the discrete-time dynamical system
+The discrete-time dynamical system is also considered
 
 $$
 \mathbf{x_{k+1}}= \mathbf{F}(\mathbf{x_k})
@@ -72,7 +75,7 @@ $$
 
 which advances the current state of the dynamic system into the future.
 
-It is desirable to work with such systems because they are well understood and thus solutions for these systems are readily available. Furthermore, linear dynamical systems are fully characterized by the eigenvalues and eigenvectors of the matrix $$\mathbf{A}$$ and when expressed in the intrinsic eigenvector coordinates, the dynamics become decoupled. To derive a solution for $$\frac{d\mathbf{x}}{dt} = \mathbf{Ax}$$ it is assumed that the solution will be in the form of $$\mathbf{x}(t) = \exp(\mathbf{A}t)\mathbf{x}(0)$$. Taking the derivative with respect to time is required. Recall that $$\exp(x)$$ is defined as $$1+x+\frac{x^{2}}{2!}+\frac{x^{3}}{3!}+\cdots+\frac{x^{n}}{n!}$$. Replacing $$x$$ with $$\exp(\mathbf{A} t)$$ yields
+It is desirable to work with such systems because they are well understood and thus solutions for these systems are readily available. Furthermore, linear dynamical systems are fully characterized by the eigenvalues and eigenvectors of the matrix $$\mathbf{A}$$ and when expressed in the intrinsic eigenvector coordinates, the dynamics are decoupled. To demonstrate this, the solution of $$\frac{d\mathbf{x}}{dt} = \mathbf{Ax}$$ is first derived. Systems of linearly dependent differential equations are solved by solutions in the form of $$\mathbf{x}(t) = \exp(\mathbf{A}t)\mathbf{x}(0)$$. The derivative of this expression must be taken with respect to time, $$t$$. Recall that $$\exp(x)$$ is defined as $$1+x+\frac{x^{2}}{2!}+\frac{x^{3}}{3!}+\cdots+\frac{x^{n}}{n!}$$. Replacing $$x$$ with $$\exp(\mathbf{A} t)$$ yields
 
 $$
 \exp(\mathbf{A} t) = I + \mathbf{A}t + \frac{(\mathbf{A}t)^2}{2!} + \frac{(\mathbf{A}t)^3}{3!} + \cdots + \frac{(\mathbf{A}t)^n}{n!}
@@ -106,10 +109,16 @@ $$
 \mathbf{A\Xi} = \mathbf{\Xi\Lambda}
 $$
 
-where $$\mathbf{\Xi}$$ is a matrix whose columns are composed of the eigenvectors of the matrix $$\mathbf{A}$$ and $$\mathbf{\Lambda}$$ is a matrix whose diagonal entries are the eigenvalues of the matrix $$\mathbf{A}$$. In the case where $$\mathbf{A}$$ has $$n$$ distinct eigenvalues, the matrix $$\mathbf{\Xi}$$ will be composed of $$n$$ linearly independent eigenvectors and thus $$\det(\mathbf{\Xi}) \neq 0$$. $$\mathbf{A}$$ can be solved entirely in terms of the spectral decomposition by the right multiplication of the matrix $$\mathbf{\Xi}^{-1}$$. This yields
+where $$\mathbf{\Xi}$$ is a matrix whose columns are composed of the eigenvectors of the matrix $$\mathbf{A}$$ and $$\mathbf{\Lambda}$$ is a matrix whose diagonal entries are the eigenvalues of the matrix $$\mathbf{A}$$. In the case where $$\mathbf{A}$$ has $$n$$ distinct eigenvalues, the matrix $$\mathbf{\Xi}$$ will be composed of $$n$$ linearly independent eigenvectors and thus $$\det(\mathbf{\Xi}) \neq 0$$. The matrix $$\mathbf{A}$$ can be solved entirely in terms of the spectral decomposition by the right multiplication of the matrix $$\mathbf{\Xi}^{-1}$$. This yields
 
 $$
-\mathbf{A} = \mathbf{\Xi\Lambda\Xi^{-1}}
+\mathbf{A} = \mathbf{\Xi\Lambda\Xi}^{-1}
+$$
+
+Similarly, $$\mathbf{\Lambda}$$ can be expressed as
+
+$$
+\mathbf{\Lambda} = \mathbf{\Xi}^{-1}\mathbf{A\Xi}
 $$
 
 Looking back at the taylor expansion of $$\exp(\mathbf{A} t)$$, if the spectral decomposition of the matrix $$\mathbf{A}$$ is instead substituted, the following series expansion is obtained
@@ -137,6 +146,8 @@ $$
 \mathbf{x}(t) =  \mathbf{\Xi} \exp(\mathbf{\Lambda} t) \mathbf{\Xi}^{-1}\mathbf{x}(0)
 $$
 
+This is an extremely useful result because each eigenvector can be characterized by a particular oscillation frequency and growth or decay factor determined by the corresponing eigenvalue. Recall that eigenvalues $$\mathbf{\Lambda} \in \mathbb{C}^n$$ and thus generally contain an imaginary component. Thus for a particular eigenvalue, $$\lambda = a + bi$$. The real component of the eigenvalue determines the growth or decay of an eigenvector and its imaginary compononent describes its oscillatory behavior. The example outlined in this post will demonstrate how the oscillatory behavior of the given data is correctly reconstruced. 
+
 Another valuable property observed when expressing this solution in terms of the spectral decomposition is that the dynamical system becomes decoupled. To observe this, a new variable is defined as $$\mathbf{z} = \mathbf{\Xi}^{-1} \mathbf{x}$$. The matrix product yields a transformation into the intrinsic eigenvector coordinates. To demonstrate this property, the derivative of $$\mathbf{z}$$ with respect to $$t$$ is computed
 
 $$
@@ -161,13 +172,7 @@ $$
 \frac{d\mathbf{z}}{dt} = \mathbf{\Xi}^{-1}\mathbf{A\Xi z}
 $$
 
-Returning to the eigenvalue problem statement $$\mathbf{A\Xi} = \mathbf{\Xi\Lambda}$$, left multiplication by $$\mathbf{\Xi}^{-1}$$ yields
-
-$$
-\mathbf{\Lambda} = \mathbf{\Xi}^{-1}\mathbf{A\Xi}
-$$
-
-thus, the following expression is obtained
+This is the exact definition for $$\mathbf{\Lambda}$$ that was defined earlier and thus 
 
 $$
 \frac{d\mathbf{z}}{dt} = \mathbf{\Lambda}\mathbf{z}
@@ -192,7 +197,7 @@ $$
 \lambda_1 z_1 , \lambda_2 z_2 , \cdots , \lambda_n z_n
 $$
 
-This is expression demonstrates how the *coupled* system $$\frac{d\mathbf{x}}{dt}$$ is transformed into an equivalent *uncoupled* system via eigenvector matrix multiplication. Summarizing what has been covered to this point, the dynamic system of interest was defined as
+This is expression demonstrates how the *coupled* system $$\frac{d\mathbf{x}}{dt}$$ is transformed into an equivalent *uncoupled* system via the spectral decomposition. Summarizing what has been covered to this point, the dynamic system of interest was defined as
 
 $$
 \frac{d\mathbf{x}}{dt} = \mathbf{f}(\mathbf{x}, t)
@@ -206,9 +211,9 @@ $$
 
 due to the available analytical techniques that allow for generating solutions to these systems. These solutions can then be utilized to fully characterize the system of interest and develop future state predictions. These properties motivated the spectral decomposition of the matrix $$\mathbf{A}$$. It is at this point in which a serious complication arises. 
 
-In practice, the matrix $$\mathbf{A}$$ poses serious computaitonal issues. Consider a dynamical system in which the state vector $$\mathbf{x} \in \mathbb{R}^n$$ contains several millions of degrees of freedom (i.e. $$n\gg 1e10^{6}$$). This is not an uncommon situation to encounter within complex dynmaical systems that are described by modern data sources which can capture data at a high resolution. This renders the representation of  $$\mathbf{A}$$ intractable as its dimensions are described as $$n^{2}$$. For example, condsider the case where the state vector contains $$1,000,000$$ entries, the matrix $$\mathbf{A}$$  would then contain $$1e^{12}$$ (i.e. 1 trillion) entries!!
+In practice, the matrix $$\mathbf{A}$$ poses serious computaitonal issues. Consider a dynamical system in which the state vector $$\mathbf{x} \in \mathbb{R}^n$$ contains several millions of degrees of freedom ($$n\gg 1e10^{6}$$). This is not an uncommon situation to encounter within complex dynmaical systems that are described by modern data sources which can capture data at a high resolution. This renders the representation of  $$\mathbf{A}$$ intractable because its dimesnions are $$n^{2}$$. For example, condsider the case where the state vector contains $$1,000,000$$ entries, the matrix $$\mathbf{A}$$ would then contain $$1e^{12}$$ (1 trillion) entries!!
 
-The DMD algorithm's objective is to compute the spectral decompostion in a numerically efficient manner. This task is accomplished by leveraging dimensionality reduction to approximate the matrix $$\mathbf{A}$$ and thus avoid any explicit computation and representation of this matrix. The algorithm is applied on a dataset that evolves in time. The data is first arranged into two data matricies.
+The DMD algorithm's objective is to compute the spectral decompostion in a numerically efficient manner. This task is accomplished by leveraging dimensionality reduction to approximate the matrix $$\mathbf{A}$$ and thus avoid any explicit computation and representation of this matrix. To apply the DMD algorithm, data is first arranged into two data matricies.
 
 $$
 \mathbf{X} = 
@@ -255,11 +260,11 @@ $$
 \sqrt{\sum_{j=1}^{n}\sum_{k=1}^{m}x_{jk}^2}
 $$  
 
-Now that the best-fit linear operator has been defined, the *exact* DMD algorithm is presented.
+This minimization corresponds to the euclidian norm and thus corresponds to a least-square best-fit optimization. The *exact* DMD algorithm is will now be outlined.
 
 ## The DMD Algorithm
 
-Step 1:
+**Step 1:**
 
 The first step of the DMD algorithm is to compute the singular value decomposition (SVD) of the data matrix $$\mathbf{X}$$:
 
@@ -267,15 +272,15 @@ $$
 \mathbf{X} = \mathbf{U \Sigma V}^{*}
 $$
 
-however, we want to use the low-rank approximation and thus truncate the SVD to the leading $$r$$ singular values and vectors and denote it as
+in practice it is only required to use the low-rank approximation and thus the SVD will be truncated to the leading $$r$$ singular values and vectors and denote it as
 
 $$
 \mathbf{X} \approx \mathbf{\tilde{U} \tilde{\Sigma} \tilde{V}}^*
 $$
 
-where $$\mathbf{\tilde{U}} \in \mathbb{C}^{n \times r}$$, $$\mathbf{\tilde{\Sigma}} \in \mathbb{C}^{r \times r}$$, $$\mathbf{\tilde{V}} \in \mathbb{C}^{m \times r}$$, and $$^{*}$$ denotes the conjugate transpose. The colums of the matrix $$\mathbf{\tilde{U}}$$ are known as the POD modes and they satisfy $$\mathbf{\tilde{U}}^*\mathbf{\tilde{U}}=\mathbf{I}$$. The columns of $$\mathbf{\tilde{V}}$$ are also orthonormal and satisfy $$\mathbf{\tilde{V}}^*\mathbf{\tilde{V}}=\mathbf{I}$$. This is a valueable property of unitary matricies and it will be exploited in the following step.
+where $$\mathbf{\tilde{U}} \in \mathbb{C}^{n \times r}$$, $$\mathbf{\tilde{\Sigma}} \in \mathbb{C}^{r \times r}$$, $$\mathbf{\tilde{V}} \in \mathbb{C}^{m \times r}$$, and $$^{*}$$ denotes the conjugate transpose. A useful property of the matricies $$\mathbf{U}$$ and $$\mathbf{V}$$ is that they are unitary matrices thus $$\mathbf{U}\mathbf{U}^{*} = \mathbf{U}^{*}\mathbf{U} = \mathbf{I}$$ and $$\mathbf{V}\mathbf{V}^{*} = \mathbf{V}^{*}\mathbf{V}=\mathbf{I}$$. This property will become extremely useful in the following steps.
 
-Step 2:
+**Step 2:**
 
 Compute $$\mathbf{\tilde{A}}$$:
 
@@ -285,7 +290,7 @@ $$
 \mathbf{A} = \mathbf{X}^{'}(\mathbf{\tilde{U} \tilde{\Sigma} \tilde{V}})^{\dagger} = \mathbf{X}^{'} \mathbf{\tilde{V} \tilde{\Sigma}}^{-1} \mathbf{\tilde{U}}^{*}
 $$
 
-Because we do not intendt to work with the full state of the matrix $$\mathbf{A}$$, we must project it onto the POD modes of $$\mathbf{\tilde{U}}$$. This is achieved by the following operation
+Because it representing the matrix $$\mathbf{A}$$ is computationally prohibative, it must be projected onto the POD modes of $$\mathbf{\tilde{U}}$$ and is achieved by
 
 $$
 \mathbf{\tilde{A}} = \mathbf{\tilde{U}}^{*} \mathbf{A} \mathbf{\tilde{U}}
@@ -297,8 +302,7 @@ $$
 \mathbf{\tilde{A}} = \mathbf{\tilde{U}}^{*} (\mathbf{X}^{'} \mathbf{\tilde{V} \tilde{\Sigma}}^{-1} \mathbf{\tilde{U}}^{*}) \mathbf{\tilde{U}} = \mathbf{\tilde{U}}^{*} \mathbf{X}^{'} \mathbf{\tilde{V} \tilde{\Sigma}}^{-1}
 $$
 
-
-Step 3:
+**Step 3:**
 
 Compute the spectral decomposition of $$\mathbf{\tilde{A}}$$
 
@@ -306,8 +310,7 @@ $$
 \mathbf{\tilde{A}W = W \Lambda}
 $$
  
-
- Step 4:
+**Step 4:**
 
  Reconstruct the high-dimensional DMD modes $$\Phi$$ using the eigenvectors of the reduced matrix $$\mathbf{\tilde{A}}$$ and the time-shifted matrix $$\mathbf{X}^{'}$$
 
@@ -315,27 +318,27 @@ $$
 \Phi = \mathbf{X}^{'} \mathbf{\tilde{V} \tilde{\Sigma}}^{-1} \mathbf{W}
  $$
 
- An interesting fact to point out is that although we used the low-dimensional eigenvectors $$\mathbf{W}$$ to compute the high-dimensional DMD modes, it can be shown that the reconstructed DMD modes are eigenvectors of the high-dimensional matrix $$\mathbf{A}$$
+ An interesting fact to point out is that althoug the low-dimensional eigenvectors $$\mathbf{W}$$ were used to compute the high-dimensional DMD modes, it can be shown that the reconstructed DMD modes are eigenvectors of the high-dimensional matrix $$\mathbf{A}$$
 
-Looking at
+Observe the followin proudct
 
 $$
 \mathbf{A} \Phi = (\mathbf{X}^{'}\mathbf{V}\mathbf{\Sigma}^{-1} \mathbf{U}^{*}) (\mathbf{X}^{'} \mathbf{\tilde{V} \tilde{\Sigma}}^{-1} \mathbf{W})
 $$
 
-Looking at this expression, we can observe that the definition of $$\mathbf{\tilde{A}}$$ is within the expresion above and thus we can substitute $$\mathbf{\tilde{A}}$$ in for $$\mathbf{\tilde{U}}^{*} \mathbf{X^{'} \tilde{V} \tilde{\Sigma}^{-1}}$$ and rewrite as follows
+Looking at this expression, the definition of $$\mathbf{\tilde{A}}$$ lies is within this expresion above and thus $$\mathbf{\tilde{A}}$$ can be substituted in for $$\mathbf{\tilde{U}}^{*} \mathbf{X^{'} \tilde{V} \tilde{\Sigma}^{-1}}$$ 
 
 $$
 \mathbf{A} \Phi = \mathbf{X'}\mathbf{V}\mathbf{\Sigma^{-1}} \mathbf{\tilde{A}} \mathbf{W}
 $$
 
-We can then use the fact that $$\mathbf{\tilde{A}W = W \Lambda}$$ and thus we obtain 
+Using $$\mathbf{\tilde{A}W = W \Lambda}$$, 
 
 $$
 \mathbf{A} \Phi = \mathbf{X'}\mathbf{V}\mathbf{\Sigma^{-1}} \mathbf{W} \mathbf{\Lambda}
 $$
 
-Lastly, we can now substitute the definition of a DMD mode to obtain
+Lastly, the definition of a DMD mode can be substituted in
 
 $$
 \mathbf{A} \mathbf{\Phi} = \mathbf{\Phi \Lambda}
@@ -355,12 +358,18 @@ $$
 \mathbf{x}(t) =  \mathbf{\Phi} \exp(\mathbf{\Lambda} t) \mathbf{b}
 $$
 
+The matrix $$\mathbf{\Lambda}$$ actually has been defined for a disctretized system thus to estimate the system state at an arbitraty time, $$\mathbf{\Lambda}$$ must be transformed before the DMD algorithm is implemented. The transformation is as follows
+
+$$
+\mathbf{\Omega} = \frac{\log{\mathbf{\Lambda}}}{\Delta t}
+$$
+
 This allows for the system state to be estimated at an arbitrary time $$t$$. Now that the algorithm has been outlined, it will be demonstrated on a simple example to highlight its *equation-free* nature and its simple implementation. 
 
 
 ## The Code
 
-In this example, two mixed spatiotemporal signals are combined and  then the DMD algorithm is applied to decompose the mixed signal into its constituents. 
+In this example, two mixed spatiotemporal signals are combined and then the DMD algorithm is applied to decompose the mixed signal into its constituents. 
 
 The two signals are defined by
 
@@ -370,15 +379,16 @@ $$
 
 First, import the nescessary libraries
 
-{% highlight python%}
+```python
 import numpy as np
+#These libraries are used for    creating the plots 
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-{% endhighlight%}
+```
 
 Next, the two functions are defined
 
-{% highlight python %}
+```python
 #Define the functions 
 def f1(xx, tt):
     y_1 = (1. / np.cosh(xx + 3)) * np.exp(2.3j * tt)
@@ -387,75 +397,75 @@ def f1(xx, tt):
 def f2(xx, tt):
     y_2 = (2. / np.cosh(xx)) * np.tanh(xx) * np.exp(2.8j * tt)
     return y_2
-{% endhighlight %}
+```
 
 Create the space and time discretizations and generate the data for analysis
 
-{% highlight python %}
+```python
 #Define time and space discretizations
 xi = np.linspace(-10, 10, 400)
 t = np.linspace(0, 4*np.pi, 200)
 dt = t[1] - t[0]
 xx, tt = np.meshgrid(xi, t)
 X = f1(xx, tt) + f2(xx, tt)
-{% endhighlight %}
+```
 
-The individual spatiotemporal signals $$f_1(x,t)$$ and $$f_2(x,t)$$ are displayed below. The two frequencies present in the functions are $$\omega_1$$ = 2.3 and $$\omega_2$$ = 2.8.
+The individual spatiotemporal signals $$f_1(x,t)$$ and $$f_2(x,t)$$ are displayed below. The two frequencies present in the functions are $$\omega_1$$ = 2.3 and $$\omega_2$$ = 2.8. The interactive display demonstrates how each function's spatial strucutre oscillates at a different frequency. 
 
 <iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="/assets/img/DynamicModeDecomp/f1.html" height="525" width="48%"></iframe>
 
 <iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="/assets/img/DynamicModeDecomp/f2.html" height="525" width="48%"></iframe>
 
-The individual signals are summed and the resulting data is displayed in the third column in the figure below. 
+The individual signals are summed and the resulting data is displayed in the third column in the figure below. Notice the distortion in the amplitude of the summed functions due to the different oscillation frequencies of the individual functions. 
 
 <iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="/assets/img/DynamicModeDecomp/Contour.html" height="525" width="100%"></iframe>
 
-Now that the data is generated, the DMD algorithm is applied. First, the data matricies $$\mathbf{X}_1$$ and $$\mathbf{X}_2$$ are created
+Now that the data is generated, the DMD algorithm can be applied. First, the data matricies $$\mathbf{X}_1$$ and $$\mathbf{X}_2$$ are created
 
-{% highlight python %}
+```python
 X_1 = X.T[:, :-1]
 X_2 = X.T[:, 1:]
-{% endhighlight %}
+```
 
 Next, the SVD of the matrix $$\mathbf{X}_1$$ is computed
 
-{% highlight python %}
+```python
 U, Sigma, V = np.linalg.svd(X_1)
 V = V.conj()
-{% endhighlight %}
+```
 
 Plotting the first ten singular values, the first two singular values caputre over 99% of the system's energy and thus it can be truncated to rank = 2.
 
 <iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="/assets/img/DynamicModeDecomp/SVD.html" height="525" width="100%"></iframe>
 
-{% highlight python %}
+```python
 U, Sigma, V = U[:, :2], Sigma[:2], V[:2, :]
-{% endhighlight %}
+```
 
  $$\mathbf{\tilde{A}}$$ and its spectral decomposition are computed as follows 
 
-{% highlight python %}
+```python
 A_tilde = np.linalg.multi_dot([U.T, X_2, V.T, np.diag(np.reciprocal(Sigma))])
 Lambda, W = np.linalg.eig(A_tilde)
-{% endhighlight %}
+```
 
 Lastly, the high-dimensional DMD modes are reconstructed
 
-{% highlight python %}
+```python
 Phi = np.linalg.multi_dot([X_2, V.T, np.diag(np.reciprocal(Sigma)), W])
-{% endhighlight %}
+```
 
 The following code block calculates $$\mathbf{b}$$
 
-{% highlight python %}
+```python
 b, residuals, rank, sigma = np.linalg.lstsq(Phi, x_1, rcond=None)
-{% endhighlight %}
+```
 
 The last step that is required is to transform the eigenvalues to their continuous-time form. This is done by taking the natural logarithm of each eigenvalue and then dividing it by $$\Delta t$$
 
-{% highlight python %}
+```python
 Omega = np.log(Lambda)/dt
-{% endhighlight %}
+```
 
 Notice that the imaginary components of Omega display the underlying frequencies in 
 
@@ -463,27 +473,29 @@ $$
 \frac{2}{\cosh}(x) \tanh(x) \exp(i2.8t), \frac{1}{\cosh}(x+3)\exp(i2.3t)
 $$
 
-{% highlight python %}
+```python
 [-8.54346131e-15+2.8j -6.84026324e-15+2.3j]
-{% endhighlight %}
+```
 
 If the DMD modes are plotted on a graph, they correspond to the two different spatial signals generated by $$f_1(x,t), f_2(x,t)$$
 
 <iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="/assets/img/DynamicModeDecomp/DMD modes.html" height="525" width="100%"></iframe>
 
-The dynamics of the system can then be constructed by evaluating $$\exp({\mathbf{\Omega} t}) \mathbf{b}$$
+Although no knowledge of the underlying functions was introduced into the DMD algorithm, it successfully managed to extract the underlying coherent spatiotemporal features that characterize the system from data alone. This is exactly why the DMD algorithm has garnered large interest within modern data-driven approaches. Its implementation scales efficiently as it exploits the SVD to reduce dimensionality, its *equation-free* nature renderes it highly flexible, and it is easy to implement. Another reason why the DMD algorithm is a great tool to analyze dynamic systems is that it allows for future state predictions. 
 
-{% highlight python %}
+To make future predictions of the system, the dynamics of the system are first constructed by evaluating $$\exp({\mathbf{\Omega} t}) \mathbf{b}$$
+
+```python
 t_exp = np.arange(X.T.shape[1]) * dt
 temp = np.repeat(Omega.reshape(-1,1), t_exp.size, axis=1)
 dynamics = np.exp(temp * t_exp) * b.reshape(2, -1)
-{% endhighlight %}
+```
 
-With the dynamics and the DMD modes, the original data can be reconstructed as follows
+To demonstrate the DMD algorthm's accuracy, the original data is first reconstructed from the time dynamics and the DMD modes.
 
-{% highlight python %}
+```
 X_dmd = Phi @ dynamics
-{% endhighlight %}
+```
 
 The accuracy of the reconstruced data is visualized by evaluating the difference between the two datasets
 
@@ -495,4 +507,4 @@ Future state prediction can then be evaluated arbitrarily long. The following pl
 
 <iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="/assets/img/DynamicModeDecomp/Prediction.html" height="525" width="100%"></iframe>
 
-
+Now that the implemenation of the DMD algorithm has been demonstrated, the following section will cover some of its extensions, applications, and limitations. 
