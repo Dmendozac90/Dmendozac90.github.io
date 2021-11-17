@@ -98,7 +98,7 @@ body{
 }
 
 .language-python.highlighter-rouge {
-  background-color: #eee;
+  background-color: rgb(219, 219, 219);
   padding: 1px 10px;
   border-radius: 8px;
 }

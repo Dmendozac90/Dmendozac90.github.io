@@ -21,7 +21,7 @@ social:
 
 # Images + files
 logo: /assets/portfolio.png
-#cv_url: /assets/files/BrendanHasz_CV.pdf
+#cv_url: /assets/files/
 resume_url: /assets/files/Daniel_Mendoza_Resume.pdf
 
 # Blog settings
@@ -32,7 +32,7 @@ plugins:
 highlighter: rouge
 color_mode: auto  # auto, light, or dark
 comments: true
-#disqus_shortname: brendanhasz-github-io
+disqus_shortname: dmendozac90-github-io
 syntax_highlight_stylesheet: syntax_highlight.css
 
 # Colors - light mode
