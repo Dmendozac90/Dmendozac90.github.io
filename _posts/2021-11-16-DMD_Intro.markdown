@@ -33,7 +33,6 @@ $$
 \frac{d\mathbf{x}}{dt} = \mathbf{f}(\mathbf{x}, t; \mathbf{\mu}),
 $$
 
-
 where $$\mathbf{x} \in \mathbb{R}^n$$ is the system state at time $$t$$, $$\mathbf{f}(\cdot)$$ are the dynamics and $$\mu$$ are the sytem parameters. To illustrate this notation with an acutal dynamic system, consider the Lorenz equations 
 
 $$

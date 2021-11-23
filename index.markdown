@@ -1,13 +1,10 @@
 ---
-# Feel free to add content and custom Front Matter to this file.
-# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
-
 layout: home
 ---
 
 <div>
 
-  <p>Hello! My name is Daniel Mendoza and I am a petroleum engineer exploring the rich and fascinating world of machine learning and data science! Check out some of the interesting projects I have worked on and feel free to contact me if you have any questions!<i class="icon-pi"></i></p>
+  <p>Hello! My name is Daniel Mendoza and I am a petroleum engineer exploring the rich and fascinating world of machine learning and data science! Check out some of the interesting projects I have worked on and feel free to contact me if you have any questions!</p>
   
 
   {% comment %} 
