@@ -35,7 +35,7 @@ layout: home
   <p>
   <h2> Categories </h2>
   <a onclick="show_tag_section('all_posts')" style="cursor: pointer;" class="post_tag"> All Posts </a>
-  {% for tag in tags %}
+  {% for tag in tags %} 
     <a onclick="show_tag_section('{{ tag | slugify }}')" style="cursor: pointer;" class="post_tag"> {{ tag }} </a>
   {% endfor %}
   </p>
