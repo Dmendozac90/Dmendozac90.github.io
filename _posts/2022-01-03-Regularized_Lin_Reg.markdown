@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "A Probabilistic Approach to Linear Regression"
-date:   2021-12-12 -
+date:   2022-01-03 -
 description: "Linear Regression is a core method used in statstics and machine learning to construct models that can be used for quantitative prediction and parameter inference. The method of least squares is typically used to estimate the model parameters and is implemented by minimizing the residual sum of squares between the model's predicted values and the true values. Although minimizing the residual sum of squares is easily comprehended, its statistical derivation is not often well understood. Understanding the statistical perspective of linear regression is fundamental for understanding model regularization and further topics in machine learning. The statistical perspective of linear regression is explored and implemented on real data."
 categories: Python Linear_Regression Regularization 
 html_url: /assets/img/LinearRegression/lstsq.html
