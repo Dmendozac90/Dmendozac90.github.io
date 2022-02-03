@@ -49,11 +49,11 @@ $$
 \mathbf{X}^2 = \left[\begin{array}{c} x^{2}_1(t_{1}) & x_{1}(t_{1})x_{2}(t_{1}) & x_{1}(t_{1})x_{3}(t_{1}) & \cdots & x^{2}_2(t_{1}) & x_{2}(t_{1})x_{3}(t_{1}) & \cdots & x^{2}_n(t_{1}) \\ x^{2}_1(t_{2}) & x_{1}(t_{2})x_{2}(t_{2}) & x_{1}(t_{2})x_{3}(t_{2}) & \cdots & x^{2}_2(t_{2}) & x_{2}(t_{2})x_{3}(t_{2}) & \cdots & x^{2}_n(t_{2}) \\ \vdots & \vdots & \vdots &\ddots & \vdots & \vdots & \ddots & \vdots \\ x^{2}_1(t_{m}) & x_{1}(t_{m})x_{2}(t_{m}) & x_{1}(t_{m})x_{3}(t_{m}) & \cdots & x^{2}_2(t_{m}) & x_{2}(t_{m})x_{3}(t_{m}) & \cdots & x^{2}_n(t_{m}) \end{array}\right]
 $$
 
-The augmented matrix $$\mathbf{\Theta}(\mathbf{X})$$ is not limited to polynomial or trigonometric transformations. This matrix can include any function that is believed to describe the system of interest; however, it is important to limit tche number of candidate functions in this matrix as it can grow very quickly. The figure below displays the total number of polynomial terms in the augmented matrix at varying polynomial degrees with increasing number of dynamic states (y-axis is displayed on a logarithmic axis for better comparison of the data). The dynamic states correspond to the columns of the data matrix $$\mathbf{X}$$.
+The augmented matrix $$\mathbf{\Theta}(\mathbf{X})$$ is not limited to polynomial or trigonometric transformations. This matrix can include any function that is believed to describe the system of interest; however, it is important to limit the number of candidate functions in this matrix as it can grow very quickly. The figure below displays the total number of polynomial terms in the augmented matrix at varying polynomial degrees with increasing number of dynamic states (y-axis is displayed on a logarithmic axis for better comparison of the data). The dynamic states correspond to the columns of the data matrix $$\mathbf{X}$$.
 
 <iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="/assets/img/SINDy/Polynomial Terms.html" height="525" width="100%"></iframe>
 
- If the data matrix $$\mathbf{X}$$ contains $$9$$ columns and tenth order polynomials are explored, the augmented matrix will contain atleast $$92,378$$ columns! This can lead to memory and computational issues that would prohibit the application of SINDy.    
+ If the data matrix $$\mathbf{X}$$ contains $$9$$ columns and tenth order polynomials are explored, the augmented matrix will contain at least $$92,378$$ columns! This can lead to memory and computational issues that would prohibit the application of SINDy.    
 
  With these definitions of the augmented and data matrices in place, a sparse regression problem can be constructed. The sparse regression is defined as
 
@@ -93,7 +93,7 @@ $$
 \frac{dz}{dt} = xy - \beta z
 $$
 
-The Lorenz system is known to have chaotic solutions for specific parameter values and intial conditions. When these parameters and intial conditions are set properly, the solutions will converge onto the Lorenz attractor. The parameters  $$\sigma=10$$, $$\rho=28$$, and $$\beta=8/3$$ will be used to generate the data. The necessary libraries are first imported
+The Lorenz system is known to have chaotic solutions for specific parameter values and initial conditions. When these parameters and initial conditions are set properly, the solutions will converge onto the Lorenz attractor. The parameters  $$\sigma=10$$, $$\rho=28$$, and $$\beta=8/3$$ will be used to generate the data. The necessary libraries are first imported
 
 ```python
 import numpy as np
@@ -229,7 +229,7 @@ $$
 \mathbf{1} = \left[\begin{array}{c}\vert \\1\\ \vert\end{array} \right] \space \space \mathbf{X} =\left[\begin{array}{c}\vert & \vert &\vert \\ \mathbf{x} & \mathbf{y} & \mathbf{z} \\ \vert & \vert &\vert \end{array} \right] \space \space \mathbf{X^{2}} = \left[\begin{array}{c}\vert & \vert &\vert & \vert &\vert&\vert\\ \mathbf{x}^{2} & \mathbf{xy} & \mathbf{xz} & \mathbf{y}^{2} & \mathbf{yz} & \mathbf{z}^{2} \\\vert & \vert &\vert&\vert & \vert &\vert\end{array} \right]
 $$
 
-```Theta_library``` uses the calculation of ```polynomial_combination``` to create a matrix of correct dimensions. The funciton then carries out a series of loops that carry out the necessary multiplications and sequentally build the augmented matrix.
+```Theta_library``` uses the calculation of ```polynomial_combination``` to create a matrix of correct dimensions. The function then carries out a series of loops that carry out the necessary multiplications and sequentially build the augmented matrix.
 
 This function can be tested on a small matrix to ensure it is working as expected. The test matrix defined as
 
@@ -375,9 +375,9 @@ $$
 \frac{dz}{dt} = xy - 8/3 z
 $$
 
-and thus recovering the intial Lorenz system. Although SINDy had no knowledge of the underlying equations that generated the time-series data, the original equations were recovered with negligible differences. Amazing right!? This simple but effective framework makes SINDy an extremely valueable method to characterize nonlinear dynamic systems and thus has been applied on a variety of datasets that have produced remarkable results.
+thus, recovering the initial Lorenz system. Although SINDy had no knowledge of the underlying equations that generated the time-series data, the original equations were recovered with negligible differences. Amazing right!? This simple but effective framework makes SINDy an extremely valuable method to characterize nonlinear dynamic systems and thus has been applied on a variety of datasets that have produced remarkable results.
 
-As a small sidenote, eventhough the algorithm was demonstrated as a series of sequential functions, it is better to design a python class with the nescessary methods to perform the sequence of operations that will output the desired result. To demonstrate this idea, a class was designed to generate the final output. This python class is defined as
+As a small sidenote, even though the algorithm was demonstrated as a series of sequential functions, it is better to design a python class with the necessary methods to perform the sequence of operations that will output the desired result. To demonstrate this idea, a class was designed to generate the final output. This python class is defined as
 
 ```python
 class SINDy(object):
@@ -457,7 +457,7 @@ class SINDy(object):
         return eqn_system
 ```
 
-Once a class with the nescessary methods and attributes has been defined, an instance of this class can be created and implemented on the data as follows
+Once a class with the necessary methods and attributes has been defined, an instance of this class can be created and implemented on the data as follows
 
 ```python
 sindy = SINDy()
@@ -469,14 +469,14 @@ sindy.equations()
  "z' = -2.666z + 0.9999xy"]
 ```
 
-This methodolgy offers a simple and concise manner of reaching the desired output of the SINDy algorithm and should be considered if one decides to implement any machine learning algorithm.
+This methodology offers a simple and concise manner of reaching the desired output of the SINDy algorithm and should be considered if one decides to implement any machine learning algorithm.
 
 ## Discussion
 
-The application of the SINDy algorithm on the Lorenz system provided a simple example to build intuition and a general understanding of the algorithm's objective and its framework. The algorithm's capabilities greatly exceed applications on ideal data and has been applied on variety of realestic scenarios with great resutls. SINDy has been applied on fluid flow systems with data captured from a few physical sensors and was able to identify dynamical models from the high-dimensional data. It has also been generalized to include control and inputs for purposes of model predictive control and has been extended for identification of models with corrputed or incomplete data , model selection by incorporating information criteria, model identification with hidden variables using delay coordinates, and has been used to identify models described by partial differential equations (PDEs). A variety of PDEs encountered in physics like the Navier-Stokes, Kuramoto-Sivashinsky, Schrödinger, reaction diffusion, Burgers, Korteweg-de Vries, and the diffusion equation for Brownian motion have been successfully identified purely from noisy data.
+The application of the SINDy algorithm on the Lorenz system provided a simple example to build intuition and a general understanding of the algorithm's objective and its framework. The algorithm's capabilities greatly exceed applications on ideal data and has been applied on variety of realistic scenarios with great results. SINDy has been applied on fluid flow systems with data captured from a few physical sensors and was able to identify dynamical models from the high-dimensional data. It has also been generalized to include control and inputs for purposes of model predictive control and has been extended for identification of models with corrupted or incomplete data , model selection by incorporating information criteria, model identification with hidden variables using delay coordinates, and has been used to identify models described by partial differential equations (PDEs). A variety of PDEs encountered in physics like the Navier-Stokes, Kuramoto-Sivashinsky, Schrödinger, reaction diffusion, Burgers, Korteweg-de Vries, and the diffusion equation for Brownian motion have been successfully identified purely from noisy data.
 
-Although the SINDy algorithm has great potential in terms of its flexibility and applications, certain precautions need to be considered prior to its implementation. These precautions include the data quality, choice of coordinate system of the data, and the choice of functions within the augmented matrix. With respect to the data quality, the major considerations are the sampling rate of the data and limiting the noise of the data. Because the derivatives are likely to be estimated from the state of the system, noisy data can drastically affect derivative estimate quality and thus limiting the accuracy of the models identfied by the algorithm. Different methods for derivative approximations should be explored and noise should be minimized during data acquisition if possible. The sampling rate is a topic that has been explored within SINDy applications and it has been shown that dynamic systems can be identified at relatively low sampling rates if the data does not have too much noise. As the noise within the data increases, higher sampling rates will be required.
+Although the SINDy algorithm has great potential in terms of its flexibility and applications, certain precautions need to be considered prior to its implementation. These precautions include the data quality, choice of coordinate system of the data, and the choice of functions within the augmented matrix. With respect to the data quality, the major considerations are the sampling rate of the data and limiting the noise of the data. Because the derivatives are likely to be estimated from the state of the system, noisy data can drastically affect derivative estimate quality and thus limiting the accuracy of the models identified by the algorithm. Different methods for derivative approximations should be explored and noise should be minimized during data acquisition if possible. The sampling rate is a topic that has been explored within SINDy applications and it has been shown that dynamic systems can be identified at relatively low sampling rates if the data does not have too much noise. As the noise within the data increases, higher sampling rates will be required.
 
-In this application of the SINDy algorithm, it was known that $$x$$, $$y$$, and $$z$$ were the correct measurements of the Lorenz system. This is massive upfront knowledge of the system that may not true in most applications. If the $$x$$, $$y$$, and $$z$$ measurements were instead given in another coordinate basis that correspond to distortion and/or rotation transformations, SINDy may have not found a good model at all. There is not a general solution to discovering the best choice of a coordinate basis; however, dimensionality reduction, advanced machine learning methods, and time delay coordinates aid in obtaining a suitable basis. 
+In this application of the SINDy algorithm, it was known that $$x$$, $$y$$, and $$z$$ were the correct measurements of the Lorenz system. This is massive upfront knowledge of the system that may not be true in most applications. If the $$x$$, $$y$$, and $$z$$ measurements were instead given in another coordinate basis that correspond to distortion and/or rotation transformations, SINDy may have not found a good model at all. There is not a general solution to discovering the best choice of a coordinate basis; however, dimensionality reduction, advanced machine learning methods, and time delay coordinates aid in obtaining a suitable basis. 
 
-The last consideration deals with the augmented matrix. Again, in the Lorenz system application, it was known that the dynamic system was described by polynomial terms. In practice, prior knowledge of the system could be leveraged to build the basis functions for the augmented matrix but this may not always be true. If the latter is true, then it is recommended that an increasing number of polynomials or other type of of functions be incorpoprated in series. At each iteration, the model should be evaluated to determine if there is any benefit from the increasing polynomial terms. One should be cautious of incorporating higher order polynomial terms as they cause the augmented to grow quickly and could inhibit the application of the SINDy algorithm. 
+The last consideration deals with the augmented matrix. Again, in the Lorenz system application, it was known that the dynamic system was described by polynomial terms. In practice, prior knowledge of the system could be leveraged to build the basis functions for the augmented matrix, but this may not always be true. If the latter is true, then it is recommended that an increasing number of polynomials or other type of functions be incorporated in series. At each iteration, the model should be evaluated to determine if there is any benefit from the increasing polynomial terms. One should be cautious of incorporating higher order polynomial terms as they cause the augmented to grow quickly and could inhibit the application of the SINDy algorithm. 
