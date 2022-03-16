@@ -1,0 +1,1224 @@
+---
+layout: post
+title:  "Multivariate Gaussian Overview and Applications"
+date:   2022-03-16 -
+description: "This post explores the multivariate Gaussian distribution and some common applications. Given its use in many statistical analyses and machine learning applications, it is important that this distribution is well understood. This will be presented by showing many of the required mathematical derivations associated with the multivariate Gaussian and applications on python."
+categories: Python Multivariate_Gaussian_Distribution Wishart_Distribution Quadratic_Discriminant_Analysis Classification Parameter_Inference
+html_url: /assets/img/MVN/MVN.html
+---
+
+**Outline**
+-   [Introduction](#introduction)
+-   [Maximum Likelihood Estimate](#maximum-likelihood-estimate)
+-   [Inference in Jointly Gaussian Distributions](#inference-in-jointly-gaussian-distributions)
+-   [Linear Gaussian Systems](#linear-gaussian-systems)
+-   [Multivariate Gaussian Parameter Inference](#multivariate-gaussian-parameter-inference)
+
+
+## Introduction
+
+The multivariate Gaussian distribution is used to model the joint distribution of continuous variables. It is commonly used in numerous quantitative fields because of its simplicity to and interpretability. This and other factors have made the multivariate Gaussian distribution into the most important and widely used probability density function. It is important that novice data science practitioners understand the fundamentals of this distribution as it will be the basis of complex probabilistic models that are used in machine learning. 
+
+This post will review key concepts and properties of the multivariate Gaussian distribution by applying the topics discussed on a bivariate Gaussian distribution. Additionally, many of the derivations commonly encountered when discussing multivariate Gaussians will be outlined. This will begin by introducing the maximum likelihood estimation of the model parameters and followed by a modeling application of Gaussian discriminant analysis. This will be followed by a brief overview of inference in jointly Gaussian distributions and linear Gaussian systems. Lastly, the inference of the model parameters will be discussed.
+
+## Maximum Likelihood Estimate
+
+The multivariate Gaussian distribution is defined as follows
+
+$$
+\begin{align*}
+
+\small \mathcal{N}(\mathbf{x}|\mathbf{\mu}, \mathbf{\Sigma}) = (2\pi)^{-\frac{D}{2}}|\mathbf{\Sigma}|^{-\frac{1}{2}}\exp(-(2)^{-1}(\mathbf{x} - \mathbf{\mu})^{T}\mathbf{\Sigma}^{-1}(\mathbf{x} -\mu))
+
+\end{align*}
+$$
+
+To apply this distribution, the mean vector $$\small \mu$$ and covariance matrix $$\small \mathbf{\Sigma}$$ must be estimated. The estimation of these parameters will be computed using the maximum likelihood estimate (MLE). The MLE is defined as 
+
+$$
+\begin{align*}
+
+\small \hat{\mu}_{\tiny \mbox{MLE}}, \hat{\mathbf{\Sigma}}_{\tiny \mbox{MLE}} = \mbox{argmax}_{\mu, \mathbf{\Sigma}} \ p(\mathbf{x}_1, \mathbf{x}_2, \cdots , \mathbf{x}_N | \mu, \mathbf{\Sigma})
+
+\end{align*}
+$$
+
+Thus given $$N$$ samples and assuming that they are independent and identically distributed (**iid**), the likelihood is written as the product of probabilities
+
+$$
+\begin{align*}
+
+\small p(\mathbf{x}_1, \mathbf{x}_2, \cdots , \mathbf{x}_N| \mu, \mathbf{\Sigma}) = \; & \small (2\pi)^{-\frac{D}{2}}|\mathbf{\Sigma}|^{-\frac{1}{2}}\exp{(-\frac{1}{2}(\mathbf{x}_{1} - \mu)^{T}\mathbf{\Sigma}^{-1}(\mathbf{x}_{1} - \mu))} \times \\[1.5ex]
+
+& \small (2\pi)^{-\frac{D}{2}}|\mathbf{\Sigma}|^{-\frac{1}{2}}\exp{(-\frac{1}{2}(\mathbf{x}_{2} - \mu)^{T}\mathbf{\Sigma}^{-1}(\mathbf{x}_{2} - \mu))} \times \cdots \times \\[1.5ex]
+
+& \small(2\pi)^{-\frac{D}{2}}|\mathbf{\Sigma}|^{-\frac{1}{2}}\exp{(-\frac{1}{2}(\mathbf{x}_{N} - \mu)^{T}\mathbf{\Sigma}^{-1}(\mathbf{x}_{N} - \mu))}
+
+\end{align*}
+$$
+
+If similar terms are combined
+
+$$
+\begin{align*}
+
+\small(2\pi)^{-\frac{D}{2}} \times (2\pi)^{-\frac{D}{2}} \times \cdots \times (2\pi)^{-\frac{D}{2}} & \small= (2\pi)^{-\frac{ND}{2}} \\[1.5ex]
+
+\small|\mathbf{\Sigma}|^{-\frac{1}{2}} \times |\mathbf{\Sigma}|^{-\frac{1}{2}} \times \cdots \times |\mathbf{\Sigma}|^{-\frac{1}{2}} & \small= |\mathbf{\Sigma}|^{-\frac{N}{2}} \\[1.5ex]
+
+\small\exp{(-\frac{1}{2}(\mathbf{x}_1 - \mu)^{T}\mathbf{\Sigma}^{-1}(\mathbf{x}_1 - \mu))} \times \exp{(-\frac{1}{2}(\mathbf{x}_2 - \mu)^{T}\mathbf{\Sigma}^{-1}(\mathbf{x}_2 - \mu))} & \small \times \cdots \times \exp{(-\frac{1}{2}(\mathbf{x}_N - \mu)^{T}\mathbf{\Sigma}^{-1}(\mathbf{x}_N - \mu))} 
+
+\end{align*}
+$$
+
+Because the product of exponentials have the same base, the exponents can grouped as a summation thus
+
+$$
+\begin{align*}
+
+& \small \exp{(-\frac{1}{2}(\mathbf{x}_1 - \mu)^{T}\mathbf{\Sigma}^{-1}(\mathbf{x}_1 - \mu) + -\frac{1}{2}(\mathbf{x}_2 - \mu)^{T}\mathbf{\Sigma}^{-1}(\mathbf{x}_2 - \mu) + \cdots + -\frac{1}{2}(\mathbf{x}_N - \mu)^{T}\mathbf{\Sigma}^{-1}(\mathbf{x}_N - \mu))}  =\\[1.5ex]
+
+& \small \exp{(-\frac{1}{2} \sum_{i=1}^{N} (\mathbf{x}_i - \mu)^{T}\mathbf{\Sigma}^{-1}(\mathbf{x}_i - \mu))}
+
+\end{align*}
+$$
+
+The likelihood can then be written as
+
+$$
+
+\small{p(\mathbf{x}_1, \mathbf{x}_2, \cdots , \mathbf{x}_N| \mu, \mathbf{\Sigma}) = (2\pi)^{-\frac{ND}{2}}|\mathbf{\Sigma}|^{-\frac{N}{2}}\exp{(-\frac{1}{2} \sum_{i=1}^{N} (\mathbf{x}_i - \mu)^{T}\mathbf{\Sigma}^{-1}(\mathbf{x}_i - \mu))}}
+
+$$
+
+This function will be maximized by taking the partial derivatives for each parameter, equating it to 0, and then solving the resulting expression for the parameter. One trick that simplifies this process is to take the log of the likelihood function. When this is done, the resulting expression is obtained
+
+$$
+
+\small \log \; p(\mathcal{D}| \mu, \mathbf{\Sigma}) = -\frac{ND}{2}(2\pi) - \frac{N}{2}|\mathbf{\Sigma}| - \frac{1}{2} \sum_{i=1}^{N}(\mathbf{x}_{i} - \mu)^{T}\mathbf{\Sigma}^{-1}(\mathbf{x}_{i} - \mu)
+
+$$
+
+Before carrying out this procedure, several results from matrix algebra are required and are listed below. 
+
+$$
+
+\boxed{ \; \\ \quad \LARGE{\cdot} \; \small{\frac{\partial}{\partial\mathbf{s}} (\mathbf{x - s})^{T}\mathbf{W}(\mathbf{x - s}) = -2\mathbf{W}(\mathbf{x - s})} \quad \\[3.0ex]
+
+\quad \LARGE{\cdot} \; \small{\frac{\partial}{\partial\mathbf{X}}\text{tr}(\mathbf{AX}^{-1}\mathbf{B}) = -(\mathbf{X}^{-1}\mathbf{BAX}^{-1})^{T}} \\[3.0ex]
+
+\quad \LARGE{\cdot} \; \small{\frac{\partial}{\partial\mathbf{X}}\log|\mathbf{X}| = (\mathbf{X}^{-1})^{T}} \\ \;}
+$$
+
+With these prerequisites, the first step is to take the partial derivative of the log-likelihood with respect to $$\small \mu$$
+
+$$
+\begin{align*}
+
+\small \frac{\partial}{\partial\mu} (-\frac{ND}{2}(2\pi) - \frac{N}{2}|\mathbf{\Sigma}| - \frac{1}{2} \sum_{i=1}^{N}(\mathbf{x}_{i} - \mu)^{T}\mathbf{\Sigma}^{-1}(\mathbf{x}_{i} - \mu)) = \mathbf{\Sigma^{-1}}\sum_{i=1}^{N}(\mathbf{x}_i - \mu)
+
+\end{align*}
+$$
+
+Next, the expression is equated to zero and then solved for the parameter $$\small \mu$$
+
+$$
+\begin{align*}
+
+\small \mathbf{\Sigma^{-1}} \small\sum_{i=1}^{N}(\mathbf{x}_i - \mu) & \; \small = 0 \\[1.5ex]
+
+\small \sum_{i=1}^{N} \mathbf{x}_i & \; \small = \sum_{i=1}^{N} \mu \\[1.5ex]
+
+\small \sum_{i=1}^{N}\mathbf{x}_i & \; \small = N \mu \\[1.5ex]
+
+\small \frac{1}{N} \sum_{i=1}^{N} \mathbf{x}_{i} & \; \small = \hat{\mu}_{\tiny \mbox{MLE}} \\[1.5ex]
+
+\small \hat{\mu}_{\tiny \mbox{MLE}} & \small \; = \bar{\mathbf{x}}_i 
+
+\end{align*}
+$$
+
+This estimate of $$\mu$$ corresponds to the empirical mean. The same process is carried out to estimate the covariance; however; before this is done, the likelihood must be reformulated using the trace operator. This is done to utilize the trace operator's invariant permutation property which can be visualized as
+
+$$
+\begin{align*}
+
+\small \text{tr}[\mathbf{ABC}] = \text{tr}[\mathbf{CAB}] = \text{tr}[\mathbf{BCA}]
+
+\end{align*}
+$$
+
+Applying this to the likelihood yields
+
+$$
+\begin{align*}
+
+\small p(\mathbf{x}_1, \mathbf{x}_2, \cdots , \mathbf{x}_N) & \small \; = (2\pi)^{-\frac{ND}{2}}|\mathbf{\Sigma}|^{-\frac{N}{2}}\exp{(-\frac{1}{2} \sum_{i=1}^{N} (\mathbf{x}_i - \mu)^{T}\mathbf{\Sigma}^{-1}(\mathbf{x}_i - \mu))} \\[1.5ex]
+
+& \small \; = (2\pi)^{-\frac{ND}{2}}|\mathbf{\Sigma}|^{-\frac{N}{2}}\exp{(-\frac{1}{2} \sum_{i=1}^{N} \text{tr}[(\mathbf{x}_i - \mu)^{T}\mathbf{\Sigma}^{-1}(\mathbf{x}_i - \mu)])} \\[1.5ex]
+
+& \small \; = (2\pi)^{-\frac{ND}{2}}|\mathbf{\Sigma}|^{-\frac{N}{2}}\exp{(-\frac{1}{2} \sum_{i=1}^{N} \text{tr}[(\mathbf{x}_i - \mu)(\mathbf{x}_i - \mu)^{T}\mathbf{\Sigma}^{-1}])}
+
+\end{align*}
+$$
+
+If $$ \small \mathbf{S}_{\mu} = \sum_{i=1}^{N}(\mathbf{x}_{i} - \mu)(\mathbf{x}_{i} - \mu)^{T}$$ is defined, the following formulation is obtained for the log-likelihood 
+
+$$
+\begin{align*}
+
+\small \log \;  p(\mathbf{x}_1, \mathbf{x}_2, \cdots , \mathbf{x}_N) = -\frac{ND}{2}\log(2\pi) - \frac{N}{2}\log(|\mathbf{\Sigma}|) - \frac{1}{2}\text{tr}[\mathbf{S}_{\mu}\mathbf{\Sigma}^{-1}]
+
+\end{align*}
+$$
+
+The partial derivative of the log-likelihood expression is taken with respect to $$\small \mathbf{\Sigma}^{-1}$$
+
+$$
+\begin{align*}
+
+&\small \frac{\partial}{\partial\mathbf{\Sigma}^{-1}}(-\frac{ND}{2}\log(2\pi) - \frac{N}{2}\log(|\mathbf{\Sigma}|) - \frac{1}{2}\text{tr}[\mathbf{S}_{\mu}\mathbf{\Sigma}^{-1}]) 
+
+ = -\frac{N}{2}(\mathbf{\Sigma}^{-1})^{T} + \frac{1}{2}(\mathbf{\Sigma}^{-1}\mathbf{S}_{\mu}\mathbf{\Sigma}^{-1})^{T}
+
+\end{align*}
+$$
+
+Recall that the covariance matrix is symmetric and thus is invariant to the transpose operator thus
+
+
+$$
+\begin{align*}
+
+\small \frac{\partial}{\partial\mathbf{\Sigma}^{-1}}( \log \; p(\mathbf{x}_1, \mathbf{x}_2, \cdots , \mathbf{x}_N)) = -\frac{N}{2}(\mathbf{\Sigma}^{-1}) + \frac{1}{2}(\mathbf{\Sigma}^{-1}\mathbf{S}_{\mu}\mathbf{\Sigma}^{-1})
+
+\end{align*}
+$$
+
+This expression is then set equal to zero and then solved for $$\small \mathbf{\Sigma}$$
+
+
+$$
+\begin{align*}
+
+\small -\frac{N}{2}(\mathbf{\Sigma}^{-1}) + \frac{1}{2}(\mathbf{\Sigma}^{-1}\mathbf{S}_{\mu}\mathbf{\Sigma}^{-1}) & \; \small= 0 \\[1.5ex]
+
+\small \mathbf{\Sigma}^{-1}\mathbf{S}_{\mu}\mathbf{\Sigma}^{-1}  & \; \small= N(\mathbf{\Sigma}^{-1}) \\[1.5ex]
+
+\small \frac{1}{N}\mathbf{S}_{\mu} & \; \small = \mathbf{\hat{\Sigma}}_{\tiny \mbox{MLE}} \\[1.5ex]
+
+\small \mathbf{\hat{\Sigma}}_{\tiny \mbox{MLE}} & \; \small = \frac{1}{N}\sum_{i=1}^{N}(\mathbf{x}_{i} - \mu)(\mathbf{x}_{i} - \mu)^{T}
+
+\end{align*}
+$$
+
+This is the empirical covariance. Computing the MLE on a given dataset is straight forward in python. The dataset used in this post will be simulated from a bivariate Gaussian with known parameters. The necessary libraries are first imported
+
+```python
+import numpy as np
+import tensorflow_probability as tfp
+
+tfd = tfp.distributions
+```
+
+The true mean and covariance are defined and then an instance of a multivariate Gaussian is initiated using these parameters and lastly, $$\small 2,500$$ samples are simulated from this distribution.
+
+```python
+#define distribution parameters
+mean = [1., 2.]
+cov = np.array([[10., 12.2], [12.2, 20.]])
+chol_cov = np.linalg.cholesky(cov)
+#instantiate MVN distribution
+MVN = tfd.MultivariateNormalTriL(loc=mean, scale_tril=chol_cov)
+#Sample data from distribution 
+X = MVN.sample(2500).numpy()
+```
+
+The empirical mean and covariance are then calculated
+
+```python
+emp_mean, emp_cov = np.mean(X, axis=0), np.cov(X, rowvar=False, bias=False)
+print(emp_mean)
+print(emp_cov)
+
+[0.9776 1.9851]
+[[10.5685 12.544 ]
+ [12.544  19.9653]]
+```
+
+Note that the empirical mean and covariance closely approximate the true parameters but are not exact. With the bivariate Gaussian parameters estimated, the defined bivariate Gaussian can be used as a generative classifier. This technique is known as Gaussian discriminant analysis (GDA). 
+The following section demonstrates a simple application of GDA on a synthetic dataset.  
+
+## Gaussian Discriminant Analysis
+
+Gaussian discriminant analysis begins by defining the class conditional density as
+
+$$
+\small p(\mathbf{x}|y=c, \mathbf{\theta}) = \mathcal{N}(\mathbf{x}|\mu_{c}, \mathbf{\Sigma}_c)
+$$
+
+Using bayes' rule, the posterior over the class labels can be defined as
+
+$$
+\small p(y=c|\mathbf{x}, \mathbf{\theta}) = \frac{p(\mathbf{x}|y=c, \mathbf{\theta}) p(y=c|\mathbf{\theta})}{\sum_{c'}p(\mathbf{x}|y=c', \mathbf{\theta}) p(y=c'|\mathbf{\theta})}
+$$
+
+The definition of the Gaussian density can then be plugged in 
+
+$$
+\small p(y=c|\mathbf{x}, \mathbf{\theta}) = \frac{(2\pi)^{-\frac{1}{2}}|\mathbf{\Sigma}_{c}|^{-\frac{1}{2}}\exp{(-\frac{1}{2} (\mathbf{x}_i - \mu_{c})^{T}\mathbf{\Sigma}_{c}^{-1}(\mathbf{x}_i - \mu_{c}))} \mathbf{\pi}_c}{\sum_{c'}(2\pi)^{-\frac{1}{2}}|\mathbf{\Sigma}_{c'}|^{-\frac{1}{2}}\exp{(-\frac{1}{2} (\mathbf{x}_i - \mu_{c'})^{T}\mathbf{\Sigma}_{c'}^{-1}(\mathbf{x}_i - \mu_{c'}))} \mathbf{\pi}_{c'}}
+$$
+
+To utilize this model, $$\small \pi_{c} \text{,} \; \mu_{c} \text{,} \; \text{and} \; \mathbf{\Sigma}_{c}$$ must be computed for each of the classes in the given dataset. The application will be demonstrated on a synthetic dataset and  is created as follows
+
+```python
+from sklearn.datasets import make_classification
+class_data = make_classification(n_samples=1000, n_features=2,n_redundant=0, n_classes=3, 
+                                 n_clusters_per_class=1, 
+                                 shift=[1.5, 3.], scale=[1.,  2.], random_state=42)
+X, y = class_data
+```
+
+The resulting dataset is displayed below. 
+
+<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="/assets/img/MVN/Classification_Sctr.html" height="525" width="100%"></iframe>
+
+The following function calculates and returns all the parameters
+
+```python
+def fit(X, y):
+    #Initialize parameters and arrays
+    D = X.shape[1]
+    classes = np.unique(y)
+    class_priors = np.array([])
+    class_mus = np.array([])
+    class_covs = np.empty(shape=(0, D, D))
+    
+    #Calculate model parameters for each class
+    for class_ in classes:
+        class_ind = np.where(y==class_)
+        X_class = X[class_ind]
+        #Calculate class prior and append
+        pi_c = np.log(X[y==class_].shape[0] / X.shape[0])
+        class_priors = np.append(class_priors, pi_c)
+        #Calculate class mean and append
+        class_mu = np.mean(X[class_ind], axis=0)
+        class_mus = np.append(class_mus, class_mu, axis=0)
+        #Caclulate class covariance and append
+        class_cov = np.cov(X[class_ind], rowvar=False, bias=False)
+        class_covs = np.append(class_covs, class_cov.reshape(1, D, D), axis=0)
+        
+    class_mus = class_mus.reshape(len(classes), -1)
+    class_covs = class_covs.reshape(len(classes), -1, X.shape[1])
+    return class_priors, class_mus, class_covs
+```
+
+The data is passed into the function and the following outputs are observed
+
+```python
+class_priors, class_mus, class_covs = fit(X, y)
+print(class_priors)
+print(class_mus)
+print(class_covs)
+
+#Class priors
+[-1.1026 -1.0996 -1.0936]
+
+#Class mus
+[[ 1.0192 14.1392]
+ [ 4.8138 14.2452]
+ [ 1.1037  7.8407]]
+
+#Class Covariances
+ [[[ 1.7946  4.7933]
+  [ 4.7933 13.778 ]]
+
+ [[ 2.557  -4.2781]
+  [-4.2781  9.3741]]
+
+ [[ 3.9596  1.5794]
+  [ 1.5794  2.0546]]]
+```
+
+To classify an input vector the probabilities of each class is computed and then the input is classified according to the maximum calculated probability. This is expressed as
+
+$$
+\small \hat{y}(\mathbf{x}) = \text{argmax}_{c}[\log p(\mathbf{x}|\mathbf{\theta}_c) + \log p(y=c|\mathbf{\pi})]
+$$
+
+To classify a vector, the marginal likelihood is not required because this value is a constant and thus only the numerator is sufficient for classification. The marginal likelihood is only required if the conditional probabilities are to be displayed. The following function calculates the probabilities using the *log-sum-exp* trick but is omitted for brevity. 
+
+```python
+def predict_log_prob(X, class_priors, class_mus, class_covs):
+    #Initialize parameters and arrays
+    N = X.shape[0]
+    classes_= class_priors.shape[0]
+    chol_covs = np.linalg.cholesky(class_covs)
+    log_probs = np.empty(shape=(N, 0))
+    #Calculate marginal likelihood using log-sum-exp trick to avoid numerical underflow
+    marginal_likelihood = log_sum_exp(X,class_priors, class_mus, class_covs)
+    #Caclulate the probability of input vectors belonging to each class
+    for class_ in range(classes_):
+        likelihood = tfd.MultivariateNormalTriL(loc=class_mus[class_], scale_tril=chol_covs[class_])
+        log_likelihood_prob = likelihood.log_prob(X).numpy()
+        log_probs = np.append(log_probs, log_likelihood_prob.reshape(-1, 1), axis=1)
+    log_numertor = log_probs + class_priors
+    return log_numertor - marginal_likelihood
+```
+Four data instances are passed into the function and the probabilities of each instance belonging to each class are returned
+
+```python
+predict_log_prob(X[6:10], class_priors, class_mus, class_covs)
+
+[[-8.4036e+01 -8.7213e-04 -7.0450e+00]
+ [-3.3880e-03 -5.6892e+00 -2.2325e+01]
+ [-9.7743e-01 -7.1639e+01 -4.7205e-01]
+ [-3.5676e+01 -3.0484e+01 -5.8176e-14]]
+```
+
+The results are interpreted as follows. In the first instance, three values are observed. This means that the log probabilities of the 1st instance belonging to class *0*, *1*, and *2* are $$\small-84.036$$, $$\small-0.00087213$$, and $$\small-7.045$$, respectively. The maximum value corresponds to class *1* and thus the first vector is classified accordingly. Instead of observing the probabilities, the `argmax` function can be utilized.
+
+```python
+print(np.argmax(predict_log_prob(X[6:10], class_priors, class_mus, class_covs), axis=1))
+
+print(y[6:10])
+
+[1 0 2 2]
+
+[1 0 0 2]
+```
+
+When compared to the true values, it is observed that one instance vector is classified incorrectly. Notice the third row of calculated log probabilities, it is observed that the probability of this instance belonging to class *0* and *2* are very similar. A certain degree of misclassifications should be expected given that the classes overlap significantly for certain feature values. This can be visualized by computing the class conditional probabilities of the features. In the figure below, it is observed that the contour associated with the highest probabilities for class *0*, overlaps with the other two classes in the dataset. It is at these intersections that misclassification instances ought to be expected. 
+
+<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="/assets/img/MVN/class_log_prob.html" height="525" width="100%"></iframe>
+
+The accuracy of the quadratic gaussian discriminant analysis model is computed.
+
+```python
+y_pred = np.argmax(predict_log_prob(X, class_priors, class_mus, class_covs), axis=1)
+print("Prediction accuracy: "+ f'{np.sum(y == y_pred) / len(y):0.1%}')
+
+"Prediction accuracy: 92.8%"
+```
+
+This is one of the great appeals of using the multivariate gaussian distribution for GDA. Fitting the model via the MLE is easy and reasonable models can be created for classification for certain applications. One issue with the MLE is that it is prone to overfitting and thus performance may be hindered when applying a model to new data. Additionally, when using a limited dataset, the estimated distribution parameters may not be representative of the true parameters that generated the data. Other methods to infer the distribution parameters will be investigated in this post which address these issues. 
+
+Before exploring the inference of parameters for the multivariate Gaussian, other common applications of this distribution will be demonstrated. These applications are computing the marginal and conditional probabilities in joint distributions and the posterior probability in linear gaussian systems. 
+
+## Inference in Jointly Gaussian Distributions
+
+Another common application of the multivariate Gaussian arises when inferring the marginal and conditional probabilities after a realization of a random variable is made or when another random variable is marginalized. 
+An applications of this will be displayed but the derivation of the marginals and conditionals are presented first. 
+
+The joint distribution of $$N$$ samples is
+
+$$
+\begin{align*}
+
+\small p(\mathbf{x}_1, \mathbf{x}_2, \cdots , \mathbf{x}_N)
+
+\end{align*}
+$$
+
+When a subset of these random vectors or variables are observed, the joint distribution can be expressed as a product of a marginal and conditional distributions
+
+$$
+
+\begin{align*}
+
+\small p(\mathbf{x}_1, \mathbf{x}_2, \cdots , \mathbf{x}_N) = p(\mathbf{x}_1 \vert \mathbf{x}_2)p(\mathbf{x}_1)
+
+\end{align*}
+
+$$
+
+where $$\small \mathbf{x}_2$$ represents the grouped observed samples. Because the conditional distribution is partitioned into observed and unobserved instances, the covariance matrix is also partitioned. The principal task then becomes inverting the partitioned covariance matrix. To accomplish this task, the following results will be utilized. This step describes the method for inverting a generalized partitioned matrix.
+
+$$
+
+\small \mathbf{M} = \left[ \begin{array}{cc} 
+
+\mathbf{E} &\; \mathbf{F} \\ 
+
+\mathbf{G} &\; \mathbf{H}
+
+\end{array} \right]
+
+$$
+
+This matrix is first diagonalized by applying the following right and left matrix multiplications.
+
+$$
+
+\small 
+
+\underbrace{\left [ \begin{array}{cc} 
+
+\mathbf{I} &\; -\mathbf{FH}^{-1} \\ 
+
+\mathbf{0} &\; \mathbf{I}
+
+\end{array} \right]}_\mathbf{X} \;
+
+
+\underbrace{\left[ \begin{array}{cc} 
+
+\mathbf{E} &\; \mathbf{F} \\ 
+
+\mathbf{G} &\; \mathbf{H}
+
+\end{array} \right]}_\mathbf{M} \;
+
+
+\underbrace{\left[ \begin{array}{cc} 
+
+\mathbf{I} &\; \mathbf{0} \\ 
+
+-\mathbf{H}^{-1}\mathbf{G} &\; \mathbf{I}
+
+\end{array} \right]}_\mathbf{Z} = 
+
+
+\underbrace{\left[ \begin{array}{cc} 
+
+\mathbf{E} - \mathbf{F} \mathbf{H}^{-1} \mathbf{G} &\; \mathbf{0} \\ 
+
+\mathbf{0} &\; \mathbf{H}
+
+\end{array} \right]}_\mathbf{W}
+
+$$
+
+Thus
+
+$$
+
+\small  \mathbf{W} = \mathbf{XMZ}
+
+$$
+
+An alternative, but equal diagonalization, can be formulated by
+
+$$
+
+\small 
+
+\underbrace{\left [ \begin{array}{cc} 
+
+\mathbf{I} &\; \mathbf{0} \\ 
+
+-\mathbf{GE}^{-1} &\; \mathbf{I}
+
+\end{array} \right]}_\mathbf{X} \;
+
+
+\underbrace{\left[ \begin{array}{cc} 
+
+\mathbf{E} &\; \mathbf{F} \\ 
+
+\mathbf{G} &\; \mathbf{H}
+
+\end{array} \right]}_\mathbf{M} \;
+
+
+\underbrace{\left[ \begin{array}{cc} 
+
+\mathbf{I} &\; -\mathbf{E}^{-1}\mathbf{F} \\ 
+
+\mathbf{0} &\; \mathbf{I}
+
+\end{array} \right]}_\mathbf{Z} = 
+
+
+\underbrace{\left[ \begin{array}{cc} 
+
+\mathbf{E} &\; \mathbf{0} \\ 
+
+\mathbf{0} &\; \mathbf{H} - \mathbf{GE}^{-1}\mathbf{F}
+
+\end{array} \right]}_\mathbf{W}
+
+$$
+
+The next step is to invert both sides of the matrix expression
+
+$$
+\begin{align*}
+
+\small \mathbf{W}^{-1} &= \small (\mathbf{XMZ})^{-1} \\[1.5ex]
+
+\small \mathbf{W}^{-1} &= \small\mathbf{Z}^{-1} \mathbf{M}^{-1} \mathbf{X}^{-1} 
+
+\end{align*}
+$$
+
+Next, $$\small \mathbf{M}^{-1}$$ is isolated
+
+$$
+
+\small \mathbf{M}^{-1} = \mathbf{ZW}^{-1}\mathbf{X}
+
+$$
+
+Thus, the partitioned matrix $$\small \mathbf{M}$$ is inverted as follows
+
+$$
+\begin{align*}
+
+\small \mathbf{M}^{-1} &= \small
+
+\left[ \begin{array}{cc} 
+
+\mathbf{I} &\; \mathbf{0} \\ 
+
+-\mathbf{H}^{-1}\mathbf{G} &\; \mathbf{I}
+
+\end{array} \right]
+
+
+\left[ \begin{array}{cc} 
+
+(\mathbf{E} - \mathbf{F} \mathbf{H}^{-1} \mathbf{G})^{-1} &\; \mathbf{0} \\ 
+
+\mathbf{0} &\; \mathbf{H}^{-1}
+
+\end{array} \right]
+
+
+\left [ \begin{array}{cc} 
+
+\mathbf{I} &\; -\mathbf{FH}^{-1} \\ 
+
+\mathbf{0} &\; \mathbf{I}
+
+\end{array} \right] \\[1.5ex]
+
+\small &= \small \left [ \begin{array}{cc} 
+
+(\mathbf{E} - \mathbf{FH}^{-1}\mathbf{G})^{-1} & \; -(\mathbf{E} - \mathbf{FH}^{-1}\mathbf{G})^{-1}\mathbf{FH}^{-1} \\
+
+-\mathbf{H}^{-1}\mathbf{G}(\mathbf{E} - \mathbf{FH}^{-1}\mathbf{G})^{-1} &\; \mathbf{H}^{-1} + \mathbf{H}^{-1}\mathbf{G}(\mathbf{E} - \mathbf{FH}^{-1}\mathbf{G})^{-1}\mathbf{FH}^{-1}
+
+\end{array} \right]
+
+\end{align*}
+$$
+
+The alternative diagonalization yields
+
+$$
+\begin{align*}
+
+\small \mathbf{M}^{-1} 
+
+\small &= \small \left [ \begin{array}{cc} 
+
+(\mathbf{E}^{-1} + \mathbf{E}^{-1}\mathbf{F}(\mathbf{H} - \mathbf{GE}^{-1}\mathbf{F})^{-1}& \; -\mathbf{E}^{-1}\mathbf{F}(\mathbf{H} - \mathbf{GE}^{-1}\mathbf{F})^{-1} \\
+
+-(\mathbf{H} - \mathbf{GE}^{-1}\mathbf{F})^{-1}\mathbf{GE}^{-1} &\; (\mathbf{H} - \mathbf{GE}^{-1}\mathbf{F})^{-1}
+
+\end{array} \right]
+
+\end{align*}
+$$
+
+If the following are defined
+
+$$
+
+\small \mathbf{M} / \mathbf{H} = \mathbf{E} - \mathbf{FH}^{-1}\mathbf{G} \\[1.5ex]
+
+\small \mathbf{M} / \mathbf{E} = \mathbf{H} - \mathbf{GE}^{-1}\mathbf{F}
+
+$$
+
+
+$$
+\begin{align*}
+
+\small \mathbf{M}^{-1} 
+
+\small &= \small \left [ \begin{array}{cc} 
+
+(\mathbf{M} / \mathbf{H})^{-1} & \; -(\mathbf{M} / \mathbf{H})^{-1}\mathbf{FH}^{-1} \\
+
+-\mathbf{H}^{-1}\mathbf{G}(\mathbf{M} / \mathbf{H})^{-1} &\; \mathbf{H}^{-1} + \mathbf{H}^{-1}\mathbf{G}(\mathbf{M} / \mathbf{H})^{-1}\mathbf{FH}^{-1}
+
+\end{array} \right]
+
+\end{align*}
+$$
+
+and 
+
+$$
+\begin{align*}
+
+\small \mathbf{M}^{-1} 
+
+\small &= \small \left [ \begin{array}{cc} 
+
+(\mathbf{E}^{-1} + \mathbf{E}^{-1}\mathbf{F}(\mathbf{M} / \mathbf{E})^{-1}\mathbf{GE}^{-1} & \; -\mathbf{E}^{-1}\mathbf{F}(\mathbf{M} / \mathbf{E})^{-1} \\
+
+-(\mathbf{M} / \mathbf{E})^{-1}\mathbf{GE}^{-1} &\; (\mathbf{M} / \mathbf{E})^{-1}
+
+\end{array} \right]
+
+\end{align*}
+$$
+
+These results will be used to invert the partitioned covariance matrix. Returning to the joint distribution,
+
+$$
+\begin{align*}
+
+\small &\exp 
+
+\small \left \{ \begin{array}{cc} 
+
+(-2)^{-1}
+
+\left ( \begin{array}{cc}
+
+\mathbf{x}_{1} - \mathbf{\mu}_{1} \\
+
+\mathbf{x}_{2} - \mathbf{\mu}_{2}
+
+\end{array} \right )^{T}
+
+
+\left ( \begin{array}{cc}
+
+\mathbf{\Sigma}_{11} & \mathbf{\Sigma}_{12} \\
+
+\mathbf{\Sigma}_{21} & \mathbf{\Sigma}_{22}
+
+\end{array} \right )^{-1}
+
+
+\left ( \begin{array}{cc}
+
+\mathbf{x}_{1} - \mathbf{\mu}_{1} \\
+
+\mathbf{x}_{2} - \mathbf{\mu}_{2}
+
+\end{array} \right )
+
+\end{array} \right \} \\[2ex] 
+
+
+\small = & \; \exp 
+
+\small \left \{ \begin{array}{cc} 
+
+(-2)^{-1}
+
+\left ( \begin{array}{cc}
+
+\mathbf{x}_{1} - \mathbf{\mu}_{1} \\
+
+\mathbf{x}_{2} - \mathbf{\mu}_{2}
+
+\end{array} \right )^{T}
+
+
+\left ( \begin{array}{cc}
+
+\mathbf{I} & \mathbf{0} \\
+
+-\mathbf{\Sigma}_{22}^{-1}\mathbf{\Sigma}_{21} & \mathbf{I}
+
+\end{array} \right )
+
+
+\left ( \begin{array}{cc}
+
+(\mathbf{\Sigma}/\mathbf{\Sigma}_{22})^{-1} & \mathbf{0} \\
+
+\mathbf{0} & \mathbf{\Sigma}_{22}^{-1}
+
+\end{array} \right )
+
+
+\left ( \begin{array}{cc}
+
+\mathbf{I} & -\mathbf{\Sigma}_{12}\mathbf{\Sigma}_{22}^{-1} \\
+
+\mathbf{0} & \mathbf{I}
+
+\end{array} \right )
+
+
+\left ( \begin{array}{cc}
+
+\mathbf{x}_{1} - \mathbf{\mu}_{1} \\
+
+\mathbf{x}_{2} - \mathbf{\mu}_{2}
+
+\end{array} \right )
+
+\end{array} \right \}
+
+\end{align*}
+$$
+
+The expression is then expanded
+
+$$
+\begin{align*}
+
+&\small ((\mathbf{x}_{1} - \mu_{1})^{T}) - (\mathbf{x}_{2} - \mu_{2})^{T} \mathbf{\Sigma}_{22}^{-1} \mathbf{\Sigma}_{21})
+
+(\mathbf{\Sigma}/\mathbf{\Sigma}_{22})^{-1}
+
+(\mathbf{x}_{1} - \mu_{1}) \; - \\[1.5ex]
+
+&\small (((\mathbf{x}_{1} - \mu_{1})^{T} - (\mathbf{x}_{2} - \mu_{2})^{T} \mathbf{\Sigma}_{22}^{-1} \mathbf{\Sigma}_{21})
+
+(\mathbf{\Sigma}/\mathbf{\Sigma}_{22})^{-1}
+
+\mathbf{\Sigma}_{12}\mathbf{\Sigma}_{22}^{-1})
+
+(\mathbf{x}_{2} - \mu_{2}) \; + \\[1.5ex]
+
+&\small (\mathbf{x}_{2} - \mu_{2})^{T} \mathbf{\Sigma}_{22}^{-1}(\mathbf{x}_{2} - \mu_{2}) \\[2.5ex]
+
+
+\small = & \; \small [(\mathbf{x}_{1} - \mu_{1})^{T} - (\mathbf{x}_{2} - \mu_{2})^{T} \mathbf{\Sigma}_{22}^{-1} \mathbf{\Sigma}_{21}] 
+
+(\mathbf{\Sigma}/\mathbf{\Sigma}_{22})^{-1}
+
+[(\mathbf{x}_{1} - \mu_{1}) - 
+
+\mathbf{\Sigma}_{12}\mathbf{\Sigma}_{22}^{-1}(\mathbf{x}_{2} - \mu_{2})] \; + \\[1.5ex]
+
+& \small (\mathbf{x}_{2} - \mu_{2})^{T} \mathbf{\Sigma}_{22}^{-1} (\mathbf{x}_{2} - \mu_{2}) \\[2.5ex]
+
+
+\small = & \; \small [\mathbf{x}_{1} - \mu_{1} - \mathbf{\Sigma}_{12}\mathbf{\Sigma}_{22}^{-1}(\mathbf{x}_{2} - \mu_{2})]^{T}
+
+(\mathbf{\Sigma}/\mathbf{\Sigma}_{22})^{-1}
+
+[\mathbf{x}_{1} - \mu_{1} - \mathbf{\Sigma}_{12}\mathbf{\Sigma}_{22}^{-1}(\mathbf{x}_{2} - \mu_{2})] \; + \\[1.5ex]
+
+& \small (\mathbf{x}_{2} - \mu_{2})^{T} \mathbf{\Sigma}_{22}^{-1} (\mathbf{x}_{2} - \mu_{2})
+
+\end{align*}
+$$
+
+This results in two quadratic form expressions thus
+
+$$
+
+\small p(\mathbf{x}_1 | \mathbf{x}_2)p(\mathbf{x}_2) = \mathcal{N}(\mathbf{x}_{1} | \mathbf{\mu}_{1|2}, \mathbf{\Sigma}_{1|2}) \mathcal{N}(\mathbf{x}_{2} | \mathbf{\mu}_{2}, \mathbf{\Sigma}_{22})
+
+$$
+
+Where
+
+$$
+\begin{align*}
+
+\small \mathbf{\mu}_{1|2} & \; \small= \mathbf{\mu}_{1} + \mathbf{\Sigma}_{12}\mathbf{\Sigma}_{22}^{-1}(\mathbf{x}_{2} - \mathbf{\mu}_2) \\[1.5ex]
+
+\small \mathbf{\Sigma}_{1|2} & \; \small = (\mathbf{\Sigma}/\mathbf{\Sigma}_{22}) = \mathbf{\Sigma}_{11} - \mathbf{\Sigma}_{12}\mathbf{\Sigma}_{22}^{-1}\mathbf{\Sigma}_{21}
+
+\end{align*}
+$$
+
+The conditional mean and covariance give insight into what occurs after realizations from a joint distribution are observed. The conditional mean is a linear function of $$\small \mathbf{x}_{2}$$ adjusted by its mean and scaled by a covariance matrix. This makes sense because making observations of the joint provides information about the remaining unobserved variables provided that the joint variables are not independent (they exhibit some degree of correlation). 
+
+Similarly, the conditional covariance matrix is the difference between the marginal covariance of $$\small \mathbf{x}_{1}$$ and a combination of the covariances between $$\small \mathbf{x}_{1}$$ and $$\small \mathbf{x}_{2}$$ and the marginal of $$\small \mathbf{x}_{2}$$. This makes sense because if random variables from the joint distribution are observed, then more information about the unobserved random variables is obtained and thus the variance is reduced. To see this, an example will be demonstrated on the bivariate Gaussian that was defined in the initial section. The plot below displays the bivariate Gaussian with the $$\small 99\%$$ confidence ellipse contour. 
+
+<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="/assets/img/MVN/Joint_Gauss.html" height="525" width="100%"></iframe>
+
+Conditional distributions are defined when an observation is made. If $$\small X_{2} = 10$$, the sample space of $$X_{1}$$ is limited to samples along the horizontal line at $$\small X_{2} = 10$$. The formulas that were derived are used to calculate the mean and variance of the conditional distribution. The conditional Gaussian pdf is added above the bivariate Gaussian. Additionally, $$\small 200$$ samples are simulated from the conditional Gaussian and plotted along $$\small X_{2} = 10$$. Note that the samples correspond to the pdf as expected. This is again demonstrated if $$X_{2} = -5$$. 
+
+
+## Linear Gaussian Systems
+
+The next application of the multivariate Gaussian distribution is in the context of linear Gaussian systems. Consider a scenario in which a noisy observation of a hidden variable is made. Let $$\small \mathbf{x}$$ be the hidden variable and $$\small \mathbf{y}$$ be the noisy observation of $$\small \mathbf{x}$$. In this scenario, it is assumed that the prior and likelihood are
+
+$$
+\begin{align*}
+
+\small p(\mathbf{x}) & \; \small = \mathcal{N}(\mathbf{x}| \mu_{x}, \mathbf{\Sigma}_{x}) \\[1.5ex]
+
+\small p(\mathbf{y}|\mathbf{x}) & \; \small = \mathcal{N}(\mathbf{y}|\mathbf{Ax} + \mathbf{b}, \mathbf{\Sigma}_{y})
+
+\end{align*}
+$$
+
+The following will demonstrate how to compute the unnormalized posterior distribution $$\small p(\mathbf{x} \mid \mathbf{y})$$
+
+$$
+\begin{align*}
+
+\small p(\mathbf{x}|\mathbf{y}) & \; \small \propto p(\mathbf{y}|\mathbf{x})p(\mathbf{x}) \\[1.5ex]
+
+& \; \small = \exp(-(2)^{-1}(\mathbf{y} - \mathbf{Ax} - \mathbf{b})^{T}\mathbf{\Sigma_{y}}^{-1}(\mathbf{y} - \mathbf{Ax} - \mathbf{b})) 
+
+\exp(-(2)^{-1}(\mathbf{x} - \mathbf{\mu_{x}})^{T} \mathbf{\Sigma_{x}}^{-1}(\mathbf{x} - \mathbf{\mu_{x}}))
+
+\end{align*}
+$$
+
+The first step is to expand the terms as follows
+
+$$
+\begin{align*}
+
+&\small \mathbf{x}^{T} \mathbf{\Sigma_{x}}^{-1} \mathbf{x} -
+
+2 \mathbf{x}^{T} \mathbf{\Sigma_{x}}^{-1} \mathbf{\mu_{x}} + 
+
+\mathbf{\mu_{x}}^{T} \mathbf{\Sigma_{x}}^{-1} \mathbf{\mu_{x}} \;\;
+
+\mbox{and} \\[1.5ex]
+
+
+&\small \mathbf{y}^{T} \mathbf{\Sigma_{y}}^{-1} \mathbf{y} -
+
+2 \mathbf{y}^{T} \mathbf{\Sigma_{y}}^{-1} \mathbf{Ax} -
+
+2 \mathbf{y}^{T} \mathbf{\Sigma_{y}}^{-1} \mathbf{b} + 
+
+2 (\mathbf{Ax})^{T} \mathbf{\Sigma_{y}}^{-1} \mathbf{b} +
+
+(\mathbf{Ax})^{T} \mathbf{\Sigma_{y}}^{-1} \mathbf{Ax} +
+
+\mathbf{b}^{T} \mathbf{\Sigma_{y}}^{-1} \mathbf{b}
+
+\end{align*}
+$$
+
+To infer $$\small \mathbf{x}$$ from $$\small \mathbf{y}$$ the terms that include $$\small \mathbf{x}$$ are grouped.
+
+
+$$
+\begin{align*}
+
+&\small \mathbf{x}^{T} \mathbf{\Sigma_{x}}^{-1} \mathbf{x} -
+
+2 \mathbf{x}^{T} \mathbf{\Sigma_{x}}^{-1} \mathbf{\mu_{x}} -
+
+2 \mathbf{y}^{T} \mathbf{\Sigma_{y}}^{-1} \mathbf{Ax} +
+
+2 (\mathbf{Ax})^{T} \mathbf{\Sigma_{y}}^{-1} \mathbf{b} +
+
+(\mathbf{Ax})^{T} \mathbf{\Sigma_{y}}^{-1} \mathbf{Ax} +
+
+\mbox{constant} \\[1.5ex]
+
+
+\small= & \; \small \mathbf{x}^{T} (\mathbf{\Sigma_{x}}^{-1} + \mathbf{A\Sigma_{y}}^{-1} \mathbf{A}) \mathbf{x} - 
+
+2 \mathbf{x}^{T}(\mathbf{\Sigma_{x}}^{-1} \mathbf{\mu_{x}} - \mathbf{A}^{T} \mathbf{\Sigma_{y}}^{-1} \mathbf{b} + \mathbf{A}^{T} 
+\mathbf{\Sigma_{y}}^{-1} \mathbf{y}) + 
+
+\mbox{constant} \\[1.5ex]
+
+
+\small= & \; \small \mathbf{x}^{T} \; \underbrace{(\mathbf{\Sigma_{x}}^{-1} + \mathbf{A\Sigma_{y}}^{-1} \mathbf{A})}_{\mathbf{A}} \; \mathbf{x} - 
+
+2 \mathbf{x}^{T} \; \underbrace{(\mathbf{\Sigma_{x}}^{-1} \mathbf{\mu_{x}} +  \mathbf{A}^{T} \mathbf{\Sigma_{y}}^{-1} (\mathbf{y} - \mathbf{b}))}_{\mathbf{Ad}} \; + \mbox{constant}
+
+\end{align*}
+$$
+
+
+The expression above is recognized to be a quadratic expression of the form $$\small \mathbf{x}^{T}\mathbf{Ax} - 2\mathbf{x}^{T} \mathbf{Ad} + \mathbf{d}^{T} \mathbf{Ad} + \mathbf{e} \;$$ thus
+
+$$
+\begin{align*}
+
+\small \mathbf{\Sigma_{x|y}}^{-1} & \small \; = \mathbf{\Sigma_{x}}^{-1} + \mathbf{A\Sigma_{y}}^{-1}\mathbf{A}  \; \; \mbox{and} \\[1.5ex]
+
+\small \mathbf{\mu_{x|y}} & \small \; = \mathbf{\Sigma_{x|y}}^{-1}(\mathbf{\Sigma{x}}^{-1} \mathbf{\mu_{x}} + \mathbf{A}^{T}\mathbf{\Sigma_{y}}^{-1}(\mathbf{y} - \mathbf{b}))
+
+\end{align*}
+$$
+
+from these results the following is formulated 
+
+$$
+\begin{align*}
+
+& \small \exp 
+
+\small \left \{ \begin{array}{cc} 
+
+(-2)^{-1}
+
+\left ( \begin{array}{cc}
+
+\mathbf{x} \\
+
+\mathbf{y}
+
+\end{array} \right )^{T}
+
+
+\left ( \begin{array}{cc}
+
+\mathbf{\Sigma_{x}}^{-1} + \mathbf{A}^{T} \mathbf{\Sigma_{y}}^{-1} \mathbf{A} & -\mathbf{A}^{T} \mathbf{\Sigma_{y}}^{-1} \\
+
+-\mathbf{\Sigma_{y}}^{-1} \mathbf{A} & \mathbf{\Sigma_{y}}^{-1}
+
+\end{array} \right )
+
+
+\left ( \begin{array}{cc}
+
+\mathbf{x} \\
+
+\mathbf{y}
+
+\end{array} \right )
+
+\end{array} \right \} \\[2.5ex]
+
+
+\small = & \;\small \exp 
+
+\small \left \{ \begin{array}{cc} 
+
+(-2)^{-1}
+
+\left ( \begin{array}{cc}
+
+\mathbf{x} \\
+
+\mathbf{y}
+
+\end{array} \right )^{T}
+
+\mathbf{\Sigma}^{-1}
+
+\left ( \begin{array}{cc}
+
+\mathbf{x} \\
+
+\mathbf{y}
+
+\end{array} \right )
+
+\end{array} \right \}
+
+\end{align*}
+$$
+
+To demonstrate the results, consider a scenario in which an object's position is being tracked from noisy measurements provided by radar. As more noisy measurements are observed, it is expected that the true location of the object is better approximated. This scenario is carried out as follows
+
+```python
+obs = 10
+lambda_ = 0.01
+cov = lambda_ * np.array([[2., 1.], [1., 1.]])
+chol_cov = np.linalg.cholesky(cov)
+#Instantiate multivariate Gaussian with given params
+MVN = tfd.MultivariateNormalTriL(loc=[0.5, 0.5], scale_tril=cov)
+#Generate samples
+samples = MVN.sample(obs)
+```
+
+The plot below displays the true but unknown location of the object, and the observed measurements. 
+
+<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="/assets/img/MVN/Noisy_Measurements.html" height="525" width="100%"></iframe>
+
+The posterior parameters are calculated as follows
+
+```python
+#Initialize prior params
+prior_cov = 0.1 * np.eye(2)
+prior_mean = np.zeros((2,1))
+#Calculate posterior params
+post_mean = post_cov @ (np.linalg.inv(cov) @ (obs * np.mean(samples, axis=0)).reshape(-1, 1) + \
+                        np.linalg.inv(prior_cov) @ prior_mean)
+post_cov = np.linalg.inv(np.linalg.inv(prior_cov) + obs * np.linalg.inv(cov))
+print(post_mean)
+print(post_cov)
+
+[[0.4905]
+ [0.4884]]
+[[0.002 0.001]
+ [0.001 0.001]]
+```
+
+Note that after ten observed samples the mean of the true location is closely approximated with low variance. The plot below demonstrates the probability contours around the true location of the object that is being tracked.
+
+<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="/assets/img/MVN/Posterior_Dist.html" height="525" width="100%"></iframe>
+
+## Multivariate Gaussian Parameter Inference
+
+The parameters for the multivariate Gaussian were estimated using the maximum likelihood estimate. Although this is an extremely quick method to estimate these parameters, it is prone to overfitting which will affect the generalization of the models like the example of the Gaussian discriminant analysis that was previously shown. This can be addressed by placing a prior on the parameters. If the resulting expression can be optimized, one can compute the maximum a posteriori (MAP) estimate. The alternative is to compute the full posterior over the parameters which has the benefit of quantifying uncertainty of the parameters. 
+
+Before this is explored, another distribution must be introduced. This is the Wishart distribution. The Wishart distribution is a generalization of the Gamma distribution for positive definite matrices. This distribution will be used to model uncertainty in covariance matrices. The Wishart distribution is defined as follows:
+
+$$
+
+\small \mbox{Wi}(\mathbf{\Lambda}|\mathbf{S}, \nu) = \frac{1}{Z_{Wi}} |\mathbf{\Lambda}|^{\frac{\nu - D - 1}{2}} \exp(-(2)^{-1} \mbox{tr}(\mathbf{\Lambda S}^{-1}))
+
+$$
+
+If $$\small \mathbf{\Sigma}^{-1} \sim \mbox{Wi}(\mathbf{S}, \nu)$$ then it can be shown that $$\small \mathbf{\Sigma} \sim \mbox{IW}(\mathbf{S}^{-1}, \nu + D + 1)$$
+
+where $$\small \mbox{IW}(\mathbf{S}^{-1}, \nu + D + 1)$$ is the inverse Wishart and is defined as
+
+$$
+
+\small \mbox{IW}(\mathbf{S}^{-1}, \nu + D + 1) = \frac{1}{Z_{Wi}} |\mathbf{\Sigma}|^{\frac{\nu + D + 1}{2}} \exp(-(2)^{-1} \mbox{tr}(\mathbf{S}^{-1} \mathbf{\Sigma}^{-1}))
+
+$$
+
+The inverse Wishart distribution has the following properties
+
+$$
+
+\small \mbox{mean} = \frac{\mathbf{S}^{-1}}{\nu - D - 1}, \quad \mbox{mode} = \frac{\mathbf{S}^{-1}}{\nu + D + 1}
+
+$$
+
+The posterior distribution for the parameters will be derived for $$\small \mathbf{\mu}$$ with known $$\small \mathbf{\Sigma}$$ then $$\mathbf{\Sigma}$$ with known $$\mathbf{\mu}$$. If it is assumed that the prior for $$\small \mathbf{\mu}$$ is Gaussian then the posterior can be expressed as
+
+$$
+\begin{align*}
+
+\small p(\mathbf{\mu}|\mathcal{D}, \mathbf{\Sigma}) \; & \small  \propto p(\mathcal{D}|\mathbf{\mu})p(\mathbf{\mu}) \\[1.5ex]
+
+
+& \small \propto \exp(-(2)^{-1}(\mathbf{x} - \bar{\mathbf{x}})^{T}\mathbf{\Sigma}^{-1}(\mathbf{x} - \bar{\mathbf{x}}))
+
+\exp(-(2)^{-1}(\mathbf{x} - \mathbf{m}_0)^{T}\mathbf{V}_{0}^{-1}(\mathbf{x} - \mathbf{m}_0)) \\[1.5ex]
+
+& \small \propto \exp(-(2)^{-1}(\mathbf{x}^{T}(\mathbf{V}_{0}^{-1} + N\mathbf{\Sigma}^{-1})\mathbf{x} - 2\mathbf{x}^{T}(\mathbf{\Sigma}^{-1}(N\bar{\mathbf{x}}) + \mathbf{V}_{0}^{-1}\mathbf{m}_0) + \mbox{constant}))
+
+\end{align*}
+$$
+
+Therefore
+
+$$
+\begin{align*}
+
+\small p(\mathbf{\mu}|\mathcal{D}, \mathbf{\Sigma}) \; & \small = \mathcal{N}(\mathbf{\mu}|\mathbf{m}_{N}, \mathbf{V}_N) \\[1.5ex]
+
+\small \mathbf{V}_{N}^{-1} \; & \small = \mathbf{V}_{0}^{-1} + N\mathbf{\Sigma}^{-1} \\[1.5ex]
+
+\small \mathbf{m}_{N} \; & \small = \mathbf{V}_{N}(\mathbf{\Sigma}^{-1}(N\bar{\mathbf{x}}) + \mathbf{V}_{0}^{-1}\mathbf{m}_{0})
+
+\end{align*}
+$$
+
+If an uninformative prior is used by setting the prior parameters to $$\small \mathbf{V}_{0} = \infty\mathbf{I}$$ and $$\mathbf{m}_{0} = \mathbf{0}$$ then the MLE is recovered. The figure below demonstrates this as an increasing number of samples are observed. 
+
+<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="/assets/img/MVN/Mu_inference.html" height="525" width="100%"></iframe>
+
+Note that initially very little samples have been observed and thus the estimate of $$\small \mathbf{\mu}$$ has a large associated variance. As the number of samples increases, the parameter $$\small \mathbf{\mu}$$ is adjusted and the variance decreases. This is the major difference between a point estimate and calculating the full posterior, when the full posterior is known, then the associated uncertainty with the parameters is also known. This additional information can be very important.
+
+The other parameter that is required for a multivariate Gaussian is the covariance matrix. This is where the Wishart or inverse Wishart comes into the analysis. 
+
+$$
+\begin{align*}
+
+\small p(\mathbf{\Sigma}|\mathcal{D}, \mathbf{\mu}) \; & \small  \propto p(\mathcal{D}|\mathbf{\mu}, \mathbf{\Sigma})p(\mathbf{\Sigma}) \\[1.5ex]
+
+& \small \propto |\mathbf{\Sigma}|^{-\frac{N}{2}} \exp(-(2)^{-1}\mbox{tr}(\mathbf{S}_{\mu}\mathbf{\Sigma}^{-1}))
+
+\small |\mathbf{\Sigma}|^{-\frac{(\nu_{0} + D + 1)}{2}} \exp(-(2)^{-1}\mbox{tr}(\mathbf{S}_{0}\mathbf{\Sigma}^{-1})) \\[1.5ex]
+
+& \small \propto |\mathbf{\Sigma}|^{-\frac{(N + \nu_{0} + D + 1)}{2}} \exp(-(2)^{-1}\mbox{tr}((\mathbf{S}_{0} + \mathbf{S}_{\mu})\mathbf{\Sigma}^{-1}))
+
+\end{align*}
+$$
+
+If the following are defined
+
+$$
+\begin{align*}
+
+\small \nu_{N} & \; \small = \nu_{0} + N \\[1.5ex]
+
+\small \mathbf{S}_{N}^{-1} & \; \small = \mathbf{S}_{0} + \mathbf{S}_{\mu}
+
+\end{align*}
+$$
+
+Then 
+
+$$
+\begin{align*}
+
+\small p(\mathbf{\Sigma}|\mathcal{D}, \mathbf{\mu}) & \; \small \propto |\mathbf{\Sigma}|^{-\frac{(\nu_{N} + D + 1)}{2}} \exp(-(2)^{-1}\mbox{tr}(\mathbf{S}_{N} \mathbf{\Sigma}^{-1})) \\[1.5ex]
+
+& \; \small = \mbox{IW}(\mathbf{\Sigma}|\mathbf{S}_{N}, \nu_{N})
+
+\end{align*}
+$$
+
+Using a proper informative prior, $$\small \mathbf{S}_{\mu} = \mathbf{S}_{\bar{\mathbf{x}}}$$ the posterior mode becomes 
+
+$$
+\begin{align*}
+
+\small \hat{\mathbf{\Sigma}}_{\tiny \mbox{MAP}} & \; \small= \frac{\mathbf{S}_{N}}{\nu_{N} + D + 1} \\[1.5ex]
+
+& \; \small = \frac{\mathbf{S}_{0} + \mathbf{S}_{\bar{x}}}{N_{0} + N} \\[1.5ex]
+
+& \; \small = \frac{N_{0}}{N_{0} + N}\frac{\mathbf{S}_{0}}{N_{0}} +
+
+\frac{N}{N_{0} + N}\frac{\mathbf{S}_{\bar{\mathbf{x}}}}{N} \\[1.5ex]
+
+& \; \small = (\lambda)\frac{\mathbf{S}_{0}}{N_{0}} + (1-\lambda)\frac{\mathbf{S}_{\bar{\mathbf{x}}}}{N} \\[1.5ex]
+
+& \; \small = (\lambda)\mathbf{\Sigma}_{0} + (1-\lambda)\hat{\mathbf{\Sigma}}_{\tiny\mbox{MLE}}
+
+\end{align*}
+$$
+
+It is common to set $$\small \mathbf{\Sigma}_{0} = \mbox{diag}(\hat{\mathbf{\Sigma}}_{\tiny\mbox{MLE}})$$ thus 
+
+$$
+\begin{align*}
+
+\small \hat{\mathbf{\Sigma}}_{\tiny \mbox{MAP}} & \; \small = (\lambda)\mbox{diag}(\hat{\mathbf{\Sigma}}_{\tiny\mbox{MLE}}) + (1-\lambda)\hat{\mathbf{\Sigma}}_{\tiny\mbox{MLE}}
+
+\end{align*}
+$$
+
+The plot below displays samples from the inverse Wishart distribution as the posterior distribution observes increasing data samples. Note that initially, samples are far off from the true covariance. As increasing samples are observed, the samples from the inverse Wishart begin to converge near the true covariance.
+
+<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="/assets/img/MVN/Covariance.html" height="525" width="100%"></iframe>
+
+Returning to the GDA example, regularizing the MLE estimate requires a minor modification to the code that was displayed above. Before the covariance matrix is appended, the MAP estimated by adding the diagonal of the MLE. The term lambda is also added to control the strength of the prior. The effect of increasing lambda causes the off-diagonal entries to shrink towards zero. If lambda is set to zero, it is trivial to see that the MLE for the covariance matrix is returned. 
+
+
+```python
+def fit(X, y, lambda_=0):
+    #Initialize parameters and arrays
+    D = X.shape[1]
+    classes = np.unique(y)
+    class_priors = np.array([])
+    class_mus = np.array([])
+    class_covs = np.empty(shape=(0, D, D))
+    
+    #Calculate model parameters for each class
+    for class_ in classes:
+        class_ind = np.where(y==class_)
+        X_class = X[class_ind]
+        #Calculate class prior and append
+        pi_c = np.log(X[y==class_].shape[0] / X.shape[0])
+        class_priors = np.append(class_priors, pi_c)
+        #Calculate class mean and append
+        class_mu = np.mean(X[class_ind], axis=0)
+        class_mus = np.append(class_mus, class_mu, axis=0)
+        #Caclulate class covariance 
+        class_cov = np.cov(X[class_ind], rowvar=False, bias=False)
+        #MAP estimate of covariance matrix
+        class_cov = lambda_ * (np.diag(class_cov) * np.eye(D)) + (1 - lambda_) * class_cov
+        #append
+        class_covs = np.append(class_covs, class_cov.reshape(1, D, D), axis=0)
+        
+    class_mus = class_mus.reshape(len(classes), -1)
+    class_covs = class_covs.reshape(len(classes), -1, X.shape[1])
+    return class_priors, class_mus, class_covs
+```
