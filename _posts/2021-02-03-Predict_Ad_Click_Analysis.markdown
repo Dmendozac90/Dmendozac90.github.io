@@ -4,7 +4,7 @@ title:  "Predict User Advertisement Click Behavior"
 date:   2022-02-03 -
 description: "In this post, a dataset comprised of numeric and categorical features will be analyzed to determine if it is possible to predict whether an individiual is likekly to click on an online advertisement."
 categories: Python Logistic_Regression Classification Regularized_Discriminant_Analysis Feature_Importance 
-html_url: /assets/img/PredictAdClick/SVD.html
+html_url: /assets/img/PredictAdClick/Violin_plots.webp
 ---
 
 **Outline**

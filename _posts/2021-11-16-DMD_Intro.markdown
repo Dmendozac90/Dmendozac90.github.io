@@ -4,7 +4,7 @@ title:  "Introduction to Dynamic Mode Decomposition"
 date:   2021-11-16 -
 description: "Originally developed within the fluid dynamics community, dynamic mode decomposition (DMD) has become a modern, powerful technique used to characterize dynamical systems from high-dimensional data. In the era of big data, the integration with modern scientific computation and machine learning is rapidly increasing the popularity of data-driven approaches like DMD to discover rich insights from complex dynamical systems. These modern data-driven approaches hold a new potential to revolutionize the understanding, predictability, and control of these systems. A brief introduction of the DMD is the topic of this post."
 categories: Python Dynamic_Mode_Decompostion Data-Driven_Methods
-html_url: /assets/img/DynamicModeDecomp/Contour.html
+html_url: /assets/img/DynamicModeDecomp/Contour.webp
 ---
 
 **Outline**

@@ -4,7 +4,7 @@ title:  "Bayesian Linear Regression: Conjugate Analysis and MCMC with Tensorflow
 date:   2022-02-19 -
 description: "Bayesian linear regression differs from point estimates in that the posterior distribution over the parameters and the predictive distribution are computed. This provides an additional component of information because the uncertainty associated with the parameters and estimates made from the model are well-defined. To obtain an analytical solution of the posterior distributions, one is restricted to selecting a class of priors that are known as conjugate priors. This results in a posterior distribution of the same form of the prior and thus the distribution parameters can be computed. When non-conjugate priors are desired to model parameters, the ability to analytically derive the parameters of the posterior is no longer possible. This forces one to be restricted to conjugate priors or explore other methods like Markov chain Monte Carlo to estimate posterior distributions. This post displays how to compute the posterior distribution using a conjugate prior over the model parameters in the scenario in which the variance of a synthetic dataset is assumed to be known. Additionally, the Hamiltonian Markov Chain algorithm will also be implemented using the Tensorflow Probability library to replicate the same results from the conjugate analysis to become familiar with Markov chain Monte Carlo methods and how they may be extended when a conjugate prior is not selected."
 categories: Tensorflow Bayesian_Linear_Regression Markov_Chain_Monte_Carlo Conjugate_Analysis
-html_url: /assets/img/BayLinReg/Predictive_posterior_4.html
+html_url: /assets/img/BayLinReg/Predictive_posterior_4.webp
 ---
 
 **Outline**

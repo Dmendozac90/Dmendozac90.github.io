@@ -4,7 +4,7 @@ title:  "Sentiment Classification with the Naive Bayes Algorithm"
 date:   2022-05-02 -
 description: "Natural language processing (NLP) is an important branch of machine learning that is concerned with developing programs that enable computers the ability to process and analyze natual language data. Applications of NLP tasks can be observed in speech recognition, text-to-speech, recommender systems, document classification and summerization along with various other examples. Given the vast sources of available text data, it is important to develop the skills to process and analyze text data. This post explores the Naive Bayes algorithm applied on a document classification task."
 categories: Python Natural_Languange_Processing Document_Classification Naive_Bayes Bag_of_Words
-html_url: /assets/img/NaiveBayes/Conditional Probabilities.html
+html_url: /assets/img/NaiveBayes/Conditional Probabilities.webp
 ---
 
 **Outline**
@@ -741,7 +741,7 @@ def classify_review(text, clicked):
 
 if __name__ == "__main__":
     app.run_server(debug=True)
-```
+```         
 
 <img src="/assets/img/NaiveBayes/Naive Bayes Prediction.gif" width="100%">.
 

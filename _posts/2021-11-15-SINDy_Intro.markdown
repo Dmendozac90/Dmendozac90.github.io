@@ -4,7 +4,7 @@ title:  "Introduction to Sparse Identification of Nonlinear Dynamics"
 date:   2021-11-16 -
 description: "The sparse identification of nonlinear dynamics (SINDy) is a method used to identify governing equations from dynamical systems using measurement data. This method relies on the assumption that many dynamical systems have few contributing terms that exist within high-dimensional nonlinear function space. The SINDy algorithm is applied on the Lorenz system of equations to demonstrate a general understanding of its application."
 categories: Python Sparse_Identification_of_Nonlinear_Dynamics Data-Driven_Methods Sparse_Regression 
-html_url: /assets/img/SINDy/Lorenz Attractor.html
+html_url: /assets/img/SINDy/Lorenz Derivative.webp
 ---
 
 **Outline**

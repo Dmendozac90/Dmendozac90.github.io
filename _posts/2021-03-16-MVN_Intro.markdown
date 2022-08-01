@@ -4,7 +4,7 @@ title:  "Multivariate Gaussian Overview and Applications"
 date:   2022-03-16 -
 description: "This post explores the multivariate Gaussian distribution and some common applications. Given its use in many statistical analyses and machine learning applications, it is important that this distribution is well understood. This will be presented by showing many of the required mathematical derivations associated with the multivariate Gaussian and applications on python."
 categories: Python Multivariate_Gaussian_Distribution Wishart_Distribution Quadratic_Discriminant_Analysis Classification Parameter_Inference
-html_url: /assets/img/MVN/MVN.html
+html_url: /assets/img/MVN/MVN.webp
 ---
 
 **Outline**
