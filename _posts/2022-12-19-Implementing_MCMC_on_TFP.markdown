@@ -501,7 +501,7 @@ states, kernel_results = sample(num_results, init_state, kernel,
 
 Although the Metropolis-Hastings algorithm runs as intended, a critical detail was overlooked resulting in an inadequate posterior parameter distribution. The traceplots of the posterior samples are displayed below. Notice the large periods in which the trace plots remain flat. This is due to proposed values being rejected and thus the new state is set to the previous state. This immediately raises questions as to why the sampler is proposing a large number of proposals that are rejected. This is another minor obstacle that needs to be addressed. 
 
-<img src="/assets/img/MCMConTFP/Traceplot.PNG" width="100%">
+<img src="/assets/img/MCMConTFP/Traceplot.png" width="100%">
 
 ## Unconstraining Parameters
 ---
