@@ -4,7 +4,7 @@ title:  "Implementing Metropolis-Hastings and Hamiltonian Monte Carlo on TensorF
 date:   2022-12-19 -
 description: "This post is the first in a series on Markov chain Monte Carlo. This is a tutorial on implementing the Metropolis-Hastings and Hamiltonian Monte Carlo algorithms using TensorFlow Probability. The main task is to estimate the parameters of a multivariate Gaussian distribution and estimate the posterior predictive distribution. This task was selected because it has a few difficulties that require solutions using TensorFlow Probability's available tools which can cause new users difficulties. Additionally, the analyical results can be compared to the MCMC computations to assure that the algorithms are working as intended."
 categories: Markov_chain_Monte_Carlo TensorFlow_Probability Advanced_Bayesian_Computation 
-html_url: /assets/img/MCMConTFP/Post and Obs Data.png
+html_url: /assets/img/MCMConTFP/Post and Obs Data Main.png
 ---
 
 **Outline**
