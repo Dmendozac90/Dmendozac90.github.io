@@ -57,7 +57,7 @@ data = tfd.MultivariateNormalTriL(loc=true_mean,
 
 A scatterplot of the data is displayed below.
 
-<img src="/assets/img/MCMConTFP/Observed Data.PNG" width="100%">
+<img src="/assets/img/MCMConTFP/Observed Data.png" width="100%">
 
 
 The data displays positive correlation and a larger degree of variance along the x-axis when compared to the y-axis as specified by the covariance matrix. With the data, the model for the posterior distribution of the parameters can be specified. 
