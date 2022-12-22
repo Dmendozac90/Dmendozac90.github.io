@@ -30,7 +30,7 @@ plugins:
   - jekyll-seo-tag
   - jekyll-fontello
 highlighter: rouge
-color_mode: auto  # auto, light, or dark
+color_mode: dark  # auto, light, or dark
 comments: true
 disqus_shortname: dmendozac90-github-io
 syntax_highlight_stylesheet: syntax_highlight.css
@@ -48,13 +48,13 @@ colors:
 
 # Colors - dark mode
 colors_dark:
-  background: 333
-  text: ccc
-  tag: 2e6830
-  tag_hover: 93cf95
-  header_background: 232
-  header_text: 93cf95
-  header_link: 93cf95
-  header_link_hover: 459c48
-  links: 459c48
-  links_visited: 357a38
+  background: 292929
+  text: ffffff
+  tag: 353638
+  tag_hover: 1a1a1b
+  header_background: 1a1a1a
+  header_text: ffffff
+  header_link: ffffff
+  header_link_hover: fa7970
+  links: fb9089
+  links_visited: fb9089

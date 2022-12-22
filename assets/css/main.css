@@ -235,19 +235,19 @@ body{
   }
 
   .language-python.highlighter-rouge {
-    background-color: #f81717;
-  }
+    background-color: #171616;
+  } /* Python code block background color */
 
   .language-matlab.highlighter-rouge {
-    background-color: #83971c;
+    background-color: #171616;
   }
 
   .language-r.highlighter-rouge {
-    background-color: #272822;
+    background-color: #171616;
   }
 
   .button_link:hover {
-    background: #272822;
+    background: #4643a4;
   }
 
 {% if site.color_mode == "auto" %}
@@ -261,11 +261,11 @@ body{
 
   .header {
     position: fixed;
-    width: 350px;
+    width: 25%;
     height: 100%;
     top: 0;
     left: 0;
-  }
+  } /* Adjusts the header width */
 
   .footer {
     position: fixed;
@@ -288,7 +288,7 @@ body{
   }
 
   .content {
-    width: 800px;
+    width: 55%;
     position: relative;
     left: calc(calc(100% - 350px)/2 - 400px + 350px);
   }
