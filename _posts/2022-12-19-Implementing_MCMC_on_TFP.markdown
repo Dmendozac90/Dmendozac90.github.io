@@ -37,7 +37,7 @@ import tensorflow as tf
 import tensorflow_probability as tfp
 import matplotlib
 import plotly.express as px
-import arviz as 
+import arviz as az
 
 tfd = tfp.distributions
 tfb = tfp.bijectors
@@ -238,7 +238,7 @@ class InverseWishartTriL(tfd.TransformedDistribution):
                 event_ndims=None, 
             ),
             scale_tril = tfp.util.ParameterProperties(
-                event_ndims=None,
+                event_ndims=None, 
             )
         )  
 ```

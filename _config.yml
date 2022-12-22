@@ -30,7 +30,7 @@ plugins:
   - jekyll-seo-tag
   - jekyll-fontello
 highlighter: rouge
-color_mode: dark  # auto, light, or dark
+color_mode: auto  # auto, light, or dark
 comments: true
 disqus_shortname: dmendozac90-github-io
 syntax_highlight_stylesheet: syntax_highlight.css

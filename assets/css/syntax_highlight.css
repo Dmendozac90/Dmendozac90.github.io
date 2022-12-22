@@ -29,7 +29,7 @@
 .highlight .kr { color: #636efa; font-weight: bold } /* Keyword.Reserved */
 .highlight .kt { color: #636efa; font-weight: bold } /* Keyword.Type */
 .highlight .m { color: #009999 } /* Literal.Number */
-.highlight .s { color: #82e880 } /* Literal.String */
+.highlight .s { color: #109618 } /* Literal.String */
 .highlight .na { color: #008080 } /* Name.Attribute */
 .highlight .nb { color: #f58518 } /* Name.Builtin */ /* Changes dict/locals * on page*/
 .highlight .nc { color: #636efa; font-weight: bold } /* Name.Class */
@@ -39,20 +39,20 @@
 .highlight .ne { color: #90409b; font-weight: bold } /* Name.Exception */
 .highlight .nf { color: #636efa; font-weight: bold } /* Name.Function */
 .highlight .nl { color: #009942; font-weight: bold } /* Name.Label */
-.highlight .nn { color: #fed952  } /* Name.Namespace */
+.highlight .nn { color: #000000  } /* Name.Namespace */
 .highlight .nt { color: #636efa } /* Name.Tag */
 .highlight .nv { color: #008080 } /* Name.Variable */
 .highlight .ow { color: #ab63fa; font-weight: bold } /* Operator.Word */
 .highlight .w { color: #2068b9 } /* Text.Whitespace */
-.highlight .mf { color: #fed952} /* Literal.Number.Float */
-.highlight .mh { color: #fed952} /* Literal.Number.Hex */
-.highlight .mi { color: #fed952} /* Literal.Number.Integer */
-.highlight .mo { color: #fed952} /* Literal.Number.Oct */
+.highlight .mf { color: #ef553b} /* Literal.Number.Float */
+.highlight .mh { color: #ef553b} /* Literal.Number.Hex */
+.highlight .mi { color: #ef553b} /* Literal.Number.Integer */
+.highlight .mo { color: #ef553b} /* Literal.Number.Oct */
 .highlight .sb { color: #ab63fa } /* Literal.String.Backtick */
 .highlight .sc { color: #ab63fa} /* Literal.String.Char */
 .highlight .sd { color: #10d073 } /* Literal.String.Doc */
 .highlight .s2 { color: #ab63fa} /* Literal.String.Double */
-.highlight .se { color: #82e880 } /* Literal.String.Escape */
+.highlight .se { color: #109618 } /* Literal.String.Escape */
 .highlight .sh { color: #10b6d0 } /* Literal.String.Heredoc */
 .highlight .si { color: #856e74 } /* Literal.String.Interpol */
 .highlight .sx { color: #483137 } /* Literal.String.Other */

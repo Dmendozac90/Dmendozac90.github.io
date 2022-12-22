@@ -82,6 +82,7 @@ layout: home
           {% if post.html_url %} 
                 <a href="{{ post.url }}" title="{{ post.title }}">
                 <iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="{{ post.html_url }}" height="525" width="100%"></iframe>
+                <img src="{{ post.img_url }}" width="100%">
                 </a>
             {% endif %}
         </div>
