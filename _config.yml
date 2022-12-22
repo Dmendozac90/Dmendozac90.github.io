@@ -55,6 +55,6 @@ colors_dark:
   header_background: 1a1a1a
   header_text: ffffff
   header_link: ffffff
-  header_link_hover: fa7970
-  links: fb9089
-  links_visited: fb9089
+  header_link_hover: 636EFA
+  links: 636EFA
+  links_visited: 636EFA
