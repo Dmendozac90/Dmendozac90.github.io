@@ -56,7 +56,9 @@ layout: home
       {% endif %}
       {% if post.html_url %} 
         <a href="{{ post.url }}" title="{{ post.title }}">
-          <img id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="{{ post.html_url }}" height="45%" width="70%">
+        <div style="text-align: center;">
+          <img id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="{{ post.html_url }}" alt="centered image" height="45%" width="70%">
+          </div>
         </a>
       {% endif %}
     </div>
