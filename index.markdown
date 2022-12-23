@@ -56,7 +56,7 @@ layout: home
       {% endif %}
       {% if post.html_url %} 
         <a href="{{ post.url }}" title="{{ post.title }}">
-          <iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="{{ post.html_url }}" height="525" width="100%"></iframe>
+          <img id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="{{ post.html_url }}" height="45%" width="70%">
         </a>
       {% endif %}
     </div>
@@ -76,13 +76,11 @@ layout: home
           {% endif %}
           {% if post.img_url %} 
             <a href="{{ post.url }}" title="{{ post.title }}">
-              <img src="{{ post.img_url }}" class="center_img">
+              <img src="/assets/img/MCMConTFP/Traceplott.png" width="100%">
             </a>
           {% endif %}
           {% if post.html_url %} 
                 <a href="{{ post.url }}" title="{{ post.title }}">
-                <iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="{{ post.html_url }}" height="525" width="100%"></iframe>
-                <img src="{{ post.img_url }}" width="100%">
                 </a>
             {% endif %}
         </div>
